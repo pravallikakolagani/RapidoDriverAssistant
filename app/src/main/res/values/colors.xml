@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="rapido_yellow">#F9A825</color>
+    <color name="rapido_yellow_dark">#F57F17</color>
+    <color name="rapido_black">#1C1B1F</color>
+    
+    <!-- Cyberpunk HUD Palette -->
+    <color name="hud_bg_dark">#E612141A</color>
+    <color name="hud_surface">#CC1E222D</color>
+    <color name="hud_border">#33FFFFFF</color>
+    <color name="hud_neon_green">#00E676</color>
+    <color name="hud_neon_green_alpha">#3300E676</color>
+    <color name="hud_crimson_red">#FF1744</color>
+    <color name="hud_crimson_red_alpha">#33FF1744</color>
+    <color name="hud_cyan">#00E5FF</color>
+    <color name="hud_amber">#FFAB00</color>
+    <color name="hud_text_primary">#FFFFFF</color>
+    <color name="hud_text_secondary">#B0BEC5</color>
+    <color name="hud_card_bg">#252936</color>
+    
+    <!-- Material Theme Base -->
+    <color name="md_theme_primary">#F9A825</color>
+    <color name="md_theme_onPrimary">#000000</color>
+    <color name="md_theme_background">#0F1117</color>
+    <color name="md_theme_surface">#1A1D27</color>
+    <color name="md_theme_surface_variant">#242938</color>
+    <color name="md_theme_onSurface">#E2E8F0</color>
+    <color name="md_theme_onSurface_variant">#94A3B8</color>
+    <color name="md_theme_outline">#334155</color>
+</resources>

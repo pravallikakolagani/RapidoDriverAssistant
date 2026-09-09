@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rapido Driver Assistant</string>
+    <string name="accessibility_service_label">Rapido Automation Service</string>
+    <string name="accessibility_service_description">Reads Rapido incoming ride offers, displays floating direction HUD, and executes auto-acceptance.</string>
+    <string name="notification_service_label">Rapido Notification Listener</string>
+</resources>

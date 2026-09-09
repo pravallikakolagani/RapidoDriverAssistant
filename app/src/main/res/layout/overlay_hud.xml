@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hudRoot"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_glass_card"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:elevation="12dp">
+
+    <!-- Top Bar: Header & Controls -->
+    <LinearLayout
+        android:id="@+id/headerDragHandle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@color/rapido_yellow" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-black"
+            android:letterSpacing="0.08"
+            android:text="RAPIDO ASSISTANT HUD"
+            android:textColor="@color/rapido_yellow"
+            android:textSize="11sp" />
+
+        <ImageButton
+            android:id="@+id/btnCloseHud"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Close HUD"
+            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+    </LinearLayout>
+
+    <!-- Main Direction Banner -->
+    <LinearLayout
+        android:id="@+id/directionBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_pill_badge"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="12dp">
+
+        <TextView
+            android:id="@+id/tvDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:letterSpacing="0.05"
+            android:text="TOWARDS HOME"
+            android:textColor="@color/hud_neon_green"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvBearingCompass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="NE (42°) • Angle Match"
+            android:textColor="@color/hud_text_secondary"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Ride Stats Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <!-- Fare Badge -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_pill_badge"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FARE"
+                android:textColor="@color/hud_text_secondary"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvFare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="₹120"
+                android:textColor="@color/hud_neon_green"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!-- Distance Badge -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_pill_badge"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PICKUP"
+                android:textColor="@color/hud_text_secondary"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvPickupDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="1.2 km"
+                android:textColor="@color/hud_cyan"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Destination Address -->
+    <TextView
+        android:id="@+id/tvDropLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="To: Indiranagar 100ft Road"
+        android:textColor="@color/hud_text_primary"
+        android:textSize="13sp" />
+
+    <!-- Decision Status Text -->
+    <TextView
+        android:id="@+id/tvDecisionStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Auto-Accepting in 5s..."
+        android:textColor="@color/hud_amber"
+        android:textSize="12sp" />
+
+    <!-- Countdown Progress Bar -->
+    <ProgressBar
+        android:id="@+id/pbCountdown"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_marginTop="4dp"
+        android:max="100"
+        android:progress="100"
+        android:progressTint="@color/rapido_yellow" />
+
+    <!-- Manual Action Override Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnAcceptNow"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/hud_neon_green"
+            android:fontFamily="sans-serif-bold"
+            android:text="ACCEPT"
+            android:textColor="@color/rapido_black"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnRejectNow"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/hud_crimson_red"
+            android:fontFamily="sans-serif-bold"
+            android:text="REJECT"
+            android:textColor="@color/hud_text_primary"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

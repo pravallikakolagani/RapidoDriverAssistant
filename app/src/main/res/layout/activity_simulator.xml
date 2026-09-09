@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background">
+
+    <!-- Simulator Control Panel -->
+    <ScrollView
+        android:id="@+id/panelSimulatorControls"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="RIDE SIMULATOR"
+                android:textColor="@color/rapido_yellow"
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Test screen-scraping, floating HUD, and auto-click without a bike"
+                android:textColor="@color/hud_text_secondary"
+                android:textSize="12sp" />
+
+            <!-- Presets Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-bold"
+                android:letterSpacing="0.05"
+                android:text="QUICK PRESETS"
+                android:textColor="@color/hud_text_secondary"
+                android:textSize="11sp" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:columnCount="2">
+
+                <Button
+                    android:id="@+id/btnPresetTowards"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="P1: Towards"
+                    android:textColor="@color/hud_neon_green" />
+
+                <Button
+                    android:id="@+id/btnPresetAway"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="P2: Away"
+                    android:textColor="@color/hud_crimson_red" />
+
+                <Button
+                    android:id="@+id/btnPresetTooFar"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="4dp"
+                    android:text="P3: Too Far"
+                    android:textColor="@color/hud_cyan" />
+
+                <Button
+                    android:id="@+id/btnPresetLowFare"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="4dp"
+                    android:text="P4: Low Fare"
+                    android:textColor="@color/hud_amber" />
+            </GridLayout>
+
+            <!-- Custom Ride Details Form -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_glass_card"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fare (₹):"
+                    android:textColor="@color/hud_text_secondary"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/etSimFare"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_pill_badge"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="12dp"
+                    android:text="120"
+                    android:textColor="@color/hud_text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Pickup Distance (km):"
+                    android:textColor="@color/hud_text_secondary"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/etSimPickup"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_pill_badge"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="12dp"
+                    android:text="1.2"
+                    android:textColor="@color/hud_text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Drop Destination:"
+                    android:textColor="@color/hud_text_secondary"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/etSimDrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_pill_badge"
+                    android:paddingHorizontal="12dp"
+                    android:text="Indiranagar 100ft Road"
+                    android:textColor="@color/hud_text_primary" />
+            </LinearLayout>
+
+            <!-- Actions -->
+            <Button
+                android:id="@+id/btnLaunchSimScreen"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/rapido_yellow"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.05"
+                android:text="⚡ LAUNCH RIDE SCREEN"
+                android:textColor="@color/rapido_black" />
+
+            <Button
+                android:id="@+id/btnTriggerSimNotification"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:text="🔔 TRIGGER NOTIFICATION SIMULATION"
+                android:textColor="@color/hud_cyan"
+                app:strokeColor="@color/hud_cyan" />
+
+            <Button
+                android:id="@+id/btnSimulateMapAudio"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:text="🗺️ SIMULATE 'GO TO MAP' (AUDIO FIX)"
+                android:textColor="@color/hud_text_primary"
+                app:strokeColor="@color/hud_border" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Mock Rapido Captain Screen (Hidden by default, shown when simulator launched) -->
+    <LinearLayout
+        android:id="@+id/mockRapidoScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#121212"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- Rapido Header Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/rapido_yellow"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.08"
+                android:text="RAPIDO CAPTAIN"
+                android:textColor="@color/rapido_black"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btnExitMockScreen"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EXIT SIM"
+                android:textColor="@color/rapido_black" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Mock Ride Offer Dialog / Card -->
+        <LinearLayout
+            android:id="@+id/cardMockRide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_glass_card"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:elevation="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="New Ride Request"
+                android:textColor="@color/rapido_yellow"
+                android:textSize="14sp" />
+
+            <!-- Fare Display -->
+            <TextView
+                android:id="@+id/tvMockFare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-black"
+                android:text="₹120"
+                android:textColor="#FFFFFF"
+                android:textSize="36sp" />
+
+            <!-- Pickup Details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📍 Pickup:"
+                    android:textColor="@color/hud_text_secondary"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvMockPickup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="1.2 km away"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Drop Details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🏁 Drop:"
+                    android:textColor="@color/hud_text_secondary"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvMockDrop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="Indiranagar 100ft Road"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Result Feedback Status -->
+            <TextView
+                android:id="@+id/tvMockResultStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:text="Waiting for Accessibility Service..."
+                android:textColor="@color/hud_amber"
+                android:textSize="13sp" />
+
+            <!-- Accept & Reject Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnMockReject"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:text="SKIP"
+                    android:textColor="@color/hud_crimson_red"
+                    app:strokeColor="@color/hud_crimson_red" />
+
+                <Button
+                    android:id="@+id/btnMockAccept"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/rapido_yellow"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="ACCEPT"
+                    android:textColor="@color/rapido_black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
