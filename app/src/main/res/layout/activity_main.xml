@@ -209,6 +209,48 @@
                     android:text="ENABLE"
                     android:textSize="11sp" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/hud_border" />
+
+            <!-- Restricted Settings Help for Android 13/14/15 -->
+            <LinearLayout
+                android:id="@+id/cardRestrictedHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_glass_card"
+                android:padding="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚠️ Restricted Setting Warning (Android 13+)"
+                    android:textColor="@color/hud_amber"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="If Accessibility says 'Restricted setting', tap below to open App Info, tap the 3 dots in the top-right corner, and choose 'Allow restricted settings'."
+                    android:textColor="@color/hud_text_secondary"
+                    android:textSize="11sp" />
+
+                <Button
+                    android:id="@+id/btnOpenAppInfo"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:text="OPEN APP INFO (UNLOCK RESTRICTED)"
+                    android:textColor="@color/hud_neon_green"
+                    android:textSize="10sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Driver Preferences Section -->

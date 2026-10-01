@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import com.rapido.assistant.R
 import com.rapido.assistant.audio.AudioBugFixer
 import com.rapido.assistant.data.DriverPreferences
@@ -29,6 +31,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         preferences = DriverPreferences(this)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    101
+                )
+            }
+        }
 
         setupListeners()
         loadPreferences()
@@ -83,6 +96,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnEnableNotification.setOnClickListener {
             val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+            startActivity(intent)
+        }
+
+        binding.btnOpenAppInfo.setOnClickListener {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.parse("package:$packageName")
+            }
             startActivity(intent)
         }
 
