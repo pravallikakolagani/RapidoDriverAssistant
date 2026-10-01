@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.rapido.assistant.R
 import com.rapido.assistant.audio.AudioBugFixer
+import com.rapido.assistant.audio.VoiceAnnouncer
 import com.rapido.assistant.data.DriverPreferences
 import com.rapido.assistant.databinding.ActivitySimulatorBinding
 import com.rapido.assistant.service.RapidoAccessibilityService
@@ -147,6 +148,7 @@ class SimulatorActivity : AppCompatActivity() {
 
         // Broadcast to Accessibility Service / Floating HUD
         val simIntent = Intent(RapidoAccessibilityService.ACTION_SIMULATE_OFFER).apply {
+            setPackage(packageName)
             putExtra("fare", fare)
             putExtra("pickup", pickup)
             putExtra("drop", drop)
@@ -212,6 +214,7 @@ class SimulatorActivity : AppCompatActivity() {
         // Audio routing test
         binding.btnSimulateMapAudio.setOnClickListener {
             AudioBugFixer.fixNavigationAudio(this, showToast = true)
+            VoiceAnnouncer.getInstance(this).speak("Bluetooth audio fix applied. Navigation guidance speech is clear.")
         }
     }
 

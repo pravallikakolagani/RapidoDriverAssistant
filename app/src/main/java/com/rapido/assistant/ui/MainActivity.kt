@@ -16,6 +16,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.rapido.assistant.R
 import com.rapido.assistant.audio.AudioBugFixer
+import com.rapido.assistant.audio.VoiceAnnouncer
 import com.rapido.assistant.data.DriverPreferences
 import com.rapido.assistant.databinding.ActivityMainBinding
 
@@ -117,6 +118,9 @@ class MainActivity : AppCompatActivity() {
         // Quick Audio Fix Button in Header
         binding.btnQuickAudioFix.setOnClickListener {
             AudioBugFixer.fixNavigationAudio(this, showToast = true)
+            if (preferences.voiceEnabled) {
+                VoiceAnnouncer.getInstance(this).speak("Bluetooth audio normalized.")
+            }
         }
 
         // Interactive Sensor & Permission Tiles (Tap to toggle / grant)
@@ -150,10 +154,12 @@ class MainActivity : AppCompatActivity() {
                     PERM_REQUEST_CODE
                 )
             } else {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.parse("package:$packageName")
-                }
-                startActivity(intent)
+                updateDeviceLocation()
+                Toast.makeText(
+                    this,
+                    "📍 GPS Synced: (${String.format("%.4f", preferences.currentLat)}, ${String.format("%.4f", preferences.currentLng)})",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 

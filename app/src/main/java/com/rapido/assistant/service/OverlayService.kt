@@ -85,7 +85,7 @@ class OverlayService : Service() {
         val notification: Notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Rapido Assistant HUD Active")
             .setContentText("Monitoring rides in real-time")
-            .setSmallIcon(android.R.drawable.ic_menu_compass)
+            .setSmallIcon(R.drawable.ic_app_icon)
             .setOngoing(true)
             .build()
 
@@ -249,14 +249,18 @@ class OverlayService : Service() {
 
         btnAccept.setOnClickListener {
             countDownTimer?.cancel()
-            val intent = Intent(RapidoAccessibilityService.ACTION_MANUAL_ACCEPT)
+            val intent = Intent(RapidoAccessibilityService.ACTION_MANUAL_ACCEPT).apply {
+                setPackage(packageName)
+            }
             sendBroadcast(intent)
             hideHud()
         }
 
         btnReject.setOnClickListener {
             countDownTimer?.cancel()
-            val intent = Intent(RapidoAccessibilityService.ACTION_MANUAL_REJECT)
+            val intent = Intent(RapidoAccessibilityService.ACTION_MANUAL_REJECT).apply {
+                setPackage(packageName)
+            }
             sendBroadcast(intent)
             hideHud()
         }

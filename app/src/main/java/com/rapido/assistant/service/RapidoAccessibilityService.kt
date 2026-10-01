@@ -175,23 +175,21 @@ class RapidoAccessibilityService : AccessibilityService() {
         }
 
         var clicked = false
-        if (rootNode != null) {
-            for (label in targetLabels) {
-                val nodes = rootNode.findAccessibilityNodeInfosByText(label)
-                for (node in nodes) {
-                    if (performClickOnNodeOrParent(node)) {
-                        Log.d(TAG, "Successfully clicked $actionType button with label '$label'")
-                        clicked = true
-                        break
-                    }
+        for (label in targetLabels) {
+            val nodes = rootNode.findAccessibilityNodeInfosByText(label)
+            for (node in nodes) {
+                if (performClickOnNodeOrParent(node)) {
+                    Log.d(TAG, "Successfully clicked $actionType button with label '$label'")
+                    clicked = true
+                    break
                 }
-                if (clicked) break
             }
+            if (clicked) break
         }
 
         // Broadcast to notify simulator activity
         val simClickAction = if (actionType == ACTION_TYPE_ACCEPT) ACTION_CLICK_ACCEPT else ACTION_CLICK_REJECT
-        sendBroadcast(Intent(simClickAction))
+        sendBroadcast(Intent(simClickAction).setPackage(packageName))
     }
 
     private fun performClickOnNodeOrParent(node: AccessibilityNodeInfo?): Boolean {
