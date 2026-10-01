@@ -31,14 +31,24 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html {
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      height: 100%;
+    }
+
     body {
       background: var(--bg-dark);
       color: var(--text-main);
       min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px;
+      padding: 10px 10px 120px 10px;
     }
 
     .container {
@@ -607,6 +617,7 @@
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
+      display: none !important;
     }
     .splash-logo-wrap {
       position: relative;
@@ -1101,8 +1112,11 @@
     setTimeout(() => { if (l3) l3.classList.add('visible'); if (fill) fill.style.width = '85%'; playTone(1040, 'sine', 0.08); }, 800);
     setTimeout(() => { if (l4) l4.classList.add('visible'); if (fill) fill.style.width = '100%'; playAcceptSound(); }, 1100);
     setTimeout(() => {
-      if (splash) splash.classList.add('hidden');
-    }, 1500);
+      if (splash) {
+        splash.classList.add('hidden');
+        splash.style.display = 'none';
+      }
+    }, 1400);
   }
 
   window.addEventListener('DOMContentLoaded', () => {
