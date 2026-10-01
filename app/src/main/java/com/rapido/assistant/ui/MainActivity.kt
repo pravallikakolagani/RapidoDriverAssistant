@@ -32,19 +32,42 @@ class MainActivity : AppCompatActivity() {
 
         preferences = DriverPreferences(this)
 
+        val requiredPerms = mutableListOf<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                    101
-                )
+                requiredPerms.add(android.Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            requiredPerms.add(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            requiredPerms.add(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
 
+        if (requiredPerms.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, requiredPerms.toTypedArray(), 101)
+        }
+
+        updateDeviceLocation()
         setupListeners()
         loadPreferences()
+    }
+
+    private fun updateDeviceLocation() {
+        try {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                val lm = getSystemService(Context.LOCATION_SERVICE) as? android.location.LocationManager
+                val loc = lm?.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER)
+                    ?: lm?.getLastKnownLocation(android.location.LocationManager.NETWORK_PROVIDER)
+                loc?.let {
+                    preferences.currentLat = it.latitude
+                    preferences.currentLng = it.longitude
+                }
+            }
+        } catch (e: Exception) {
+            // Safe fallback
+        }
     }
 
     override fun onResume() {
