@@ -3,29 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/samsung_bg"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
 
-        <!-- App Brand Header -->
+        <!-- Top Profile Bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingVertical="4dp">
 
             <ImageView
                 android:layout_width="44dp"
                 android:layout_height="44dp"
-                android:background="@drawable/bg_pill_badge"
-                android:padding="8dp"
-                android:src="@android:drawable/ic_dialog_map"
-                app:tint="@color/rapido_yellow" />
+                android:background="@drawable/bg_samsung_card"
+                android:padding="6dp"
+                android:src="@drawable/ic_app_icon" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -37,245 +37,380 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
-                    android:text="RAPIDO ASSISTANT"
+                    android:text="Captain Dashboard"
                     android:textColor="@color/hud_text_primary"
-                    android:textSize="20sp" />
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Smart Automation &amp; Heads-Up Assistant"
-                    android:textColor="@color/hud_text_secondary"
-                    android:textSize="12sp" />
+                    android:text="● ASSISTANT ACTIVE"
+                    android:textColor="@color/samsung_mint"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnQuickAudioFix"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="🔊 AUDIO FIX"
+                android:textColor="@color/samsung_blue"
+                android:textSize="11sp" />
         </LinearLayout>
 
-        <!-- Top Quick Launch Simulator Banner -->
-        <Button
-            android:id="@+id/btnQuickLaunchSimulator"
-            style="@style/Widget.Material3.Button"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/rapido_yellow"
-            android:fontFamily="sans-serif-black"
-            android:letterSpacing="0.05"
-            android:text="🚀 LAUNCH RIDE SIMULATOR"
-            android:textColor="@color/rapido_black"
-            android:textSize="15sp" />
-
-        <!-- Permissions Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="sans-serif-bold"
-            android:letterSpacing="0.06"
-            android:text="SYSTEM PERMISSIONS"
-            android:textColor="@color/hud_text_secondary"
-            android:textSize="12sp" />
-
+        <!-- Samsung Health Style Shift Target Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_glass_card"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_samsung_card"
             android:orientation="vertical"
-            android:padding="14dp">
+            android:padding="18dp">
 
-            <!-- Accessibility Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:letterSpacing="0.06"
+                    android:text="TODAY'S SHIFT TARGETS"
+                    android:textColor="@color/hud_text_secondary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Accessibility Service"
-                        android:textColor="@color/hud_text_primary"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvAccessibilityStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Required for screen scraping &amp; clicks"
-                        android:textColor="@color/hud_text_secondary"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnEnableAccessibility"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:text="ENABLE"
-                    android:textSize="11sp" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_pill_badge"
+                    android:backgroundTint="#2010B981"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
+                    android:text="EFFICIENCY 92%"
+                    android:textColor="@color/samsung_mint"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="10dp"
-                android:background="@color/hud_border" />
-
-            <!-- Overlay Card -->
+            <!-- Metrics Column -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginTop="14dp"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/bg_pill_badge"
+                        android:backgroundTint="@color/samsung_mint" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Display Over Other Apps"
-                        android:textColor="@color/hud_text_primary"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvOverlayStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Required for Cyberpunk HUD"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Earnings Target"
                         android:textColor="@color/hud_text_secondary"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹1,450 / ₹2,000"
+                        android:textColor="@color/hud_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnEnableOverlay"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:text="ENABLE"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="10dp"
-                android:background="@color/hud_border" />
-
-            <!-- Notification Listener Card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/bg_pill_badge"
+                        android:backgroundTint="@color/samsung_blue" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Notification Access"
-                        android:textColor="@color/hud_text_primary"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvNotificationStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Required for background lock-screen pings"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Average Profit Rate"
                         android:textColor="@color/hud_text_secondary"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹38.2 / km"
+                        android:textColor="@color/hud_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/btnEnableNotification"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:text="ENABLE"
-                    android:textSize="11sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/bg_pill_badge"
+                        android:backgroundTint="@color/samsung_amber" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Traps Screened Out"
+                        android:textColor="@color/hud_text_secondary"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8 Rides (Saved 18 km)"
+                        android:textColor="@color/hud_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
+        </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="10dp"
-                android:background="@color/hud_border" />
+        <!-- DEDICATED DEMO MODE HERO CARD -->
+        <LinearLayout
+            android:id="@+id/cardLaunchDemo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_samsung_card"
+            android:backgroundTint="#182338"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-            <!-- Restricted Settings Help for Android 13/14/15 -->
             <LinearLayout
-                android:id="@+id/cardRestrictedHelp"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_glass_card"
-                android:padding="10dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="⚠️ Restricted Setting Warning (Android 13+)"
-                    android:textColor="@color/hud_amber"
-                    android:textStyle="bold"
-                    android:textSize="12sp" />
+                    android:text="🚀 Interactive Demo Mode"
+                    android:textColor="@color/hud_text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="If Accessibility says 'Restricted setting', tap below to open App Info, tap the 3 dots in the top-right corner, and choose 'Allow restricted settings'."
+                    android:layout_marginTop="3dp"
+                    android:text="Simulate rides, test HUD &amp; voice flow"
                     android:textColor="@color/hud_text_secondary"
                     android:textSize="11sp" />
-
-                <Button
-                    android:id="@+id/btnOpenAppInfo"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="38dp"
-                    android:layout_marginTop="8dp"
-                    android:text="OPEN APP INFO (UNLOCK RESTRICTED)"
-                    android:textColor="@color/hud_neon_green"
-                    android:textSize="10sp" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnOpenSimulator"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/samsung_blue"
+                android:text="OPEN DEMO →"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Driver Preferences Section -->
+        <!-- Icon-Driven Status & Permission Chips (2x2 Grid) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="sans-serif-bold"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="8dp"
             android:letterSpacing="0.06"
-            android:text="DRIVER PREFERENCES"
+            android:text="SYSTEM SENSORS &amp; PERMISSIONS"
             android:textColor="@color/hud_text_secondary"
-            android:textSize="12sp" />
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_glass_card"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="horizontal">
 
-            <!-- Minimum Fare -->
+            <!-- Accessibility Card -->
+            <LinearLayout
+                android:id="@+id/tileAccessibility"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_samsung_card"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="♿ Accessibility"
+                    android:textColor="@color/hud_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvAccessibilityStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Active"
+                    android:textColor="@color/samsung_mint"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- Overlay Card -->
+            <LinearLayout
+                android:id="@+id/tileOverlay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_samsung_card"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🛡️ HUD Overlay"
+                    android:textColor="@color/hud_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvOverlayStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Allowed"
+                    android:textColor="@color/samsung_mint"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <!-- Notification Card -->
+            <LinearLayout
+                android:id="@+id/tileNotification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_samsung_card"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔔 Notifications"
+                    android:textColor="@color/hud_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvNotificationStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Listening"
+                    android:textColor="@color/samsung_mint"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- Location Card -->
+            <LinearLayout
+                android:id="@+id/tileLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_samsung_card"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📍 GPS Sensor"
+                    android:textColor="@color/hud_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvLocationStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Synced"
+                    android:textColor="@color/samsung_mint"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Driver Strategy Sliders Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_samsung_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.06"
+                android:text="DRIVER STRATEGY THRESHOLDS"
+                android:textColor="@color/hud_text_secondary"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <!-- Min Fare Slider -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -283,32 +418,33 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Minimum Fare"
+                    android:text="💰 Minimum Fare"
                     android:textColor="@color/hud_text_primary"
-                    android:textSize="14sp" />
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvMinFareValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-bold"
                     android:text="₹40"
-                    android:textColor="@color/hud_neon_green"
-                    android:textSize="16sp" />
+                    android:textColor="@color/samsung_mint"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/sliderMinFare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:value="40"
                 android:valueFrom="20"
                 android:valueTo="200"
-                android:stepSize="5"
-                android:value="40"
-                app:thumbColor="@color/rapido_yellow"
-                app:trackColorActive="@color/rapido_yellow" />
+                app:thumbColor="@color/samsung_mint"
+                app:trackColorActive="@color/samsung_mint"
+                app:trackColorInactive="@color/samsung_surface" />
 
-            <!-- Max Pickup Distance -->
+            <!-- Max Pickup Slider -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -320,140 +456,127 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Maximum Pickup Distance"
+                    android:text="📏 Max Pickup Deadhead"
                     android:textColor="@color/hud_text_primary"
-                    android:textSize="14sp" />
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvMaxPickupValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-bold"
                     android:text="3.0 km"
-                    android:textColor="@color/hud_cyan"
-                    android:textSize="16sp" />
+                    android:textColor="@color/samsung_mint"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/sliderMaxPickup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:valueFrom="1"
-                android:valueTo="10"
                 android:stepSize="0.5"
                 android:value="3.0"
-                app:thumbColor="@color/hud_cyan"
-                app:trackColorActive="@color/hud_cyan" />
+                android:valueFrom="1.0"
+                android:valueTo="10.0"
+                app:thumbColor="@color/samsung_mint"
+                app:trackColorActive="@color/samsung_mint"
+                app:trackColorInactive="@color/samsung_surface" />
 
-            <!-- Switches Row -->
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchAutoAccept"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:checked="true"
-                android:text="Auto-Accept Matching Rides"
-                android:textColor="@color/hud_text_primary" />
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchVoice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Voice Announcements (Bluetooth)"
-                android:textColor="@color/hud_text_primary" />
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchOverlay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Show Floating Cyberpunk HUD"
-                android:textColor="@color/hud_text_primary" />
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchSkipNight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Skip Night Rides (10 PM - 6 AM)"
-                android:textColor="@color/hud_text_primary" />
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchAudioBugFix"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Auto-Fix Map Audio Bug (Mute-Unmute)"
-                android:textColor="@color/hud_text_primary" />
-
-            <!-- Home Location -->
+            <!-- Home / Base Anchor -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Home Location (Towards Home Filter):"
-                android:textColor="@color/hud_text_secondary"
-                android:textSize="12sp" />
+                android:text="🏠 Home / Target Destination"
+                android:textColor="@color/hud_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/etHomeAddress"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/bg_pill_badge"
-                android:hint="Indiranagar, Bengaluru"
-                android:paddingHorizontal="12dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_samsung_card"
+                android:backgroundTint="@color/samsung_surface"
+                android:hint="e.g. Indiranagar, Bangalore"
+                android:paddingHorizontal="14dp"
                 android:textColor="@color/hud_text_primary"
                 android:textColorHint="@color/hud_text_secondary"
                 android:textSize="13sp" />
 
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#22FFFFFF" />
+
+            <!-- Automation Switches -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:letterSpacing="0.06"
+                android:text="AUTOMATION ENGINE"
+                android:textColor="@color/hud_text_secondary"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchAutoAccept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="⚡ Auto-Accept Matching Rides"
+                android:textColor="@color/hud_text_primary"
+                android:textSize="13sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchVoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="🔊 Voice Cues &amp; Audio Chimes"
+                android:textColor="@color/hud_text_primary"
+                android:textSize="13sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="🛡️ Dynamic Cyberpunk HUD"
+                android:textColor="@color/hud_text_primary"
+                android:textSize="13sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchAudioBugFix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="🎧 Auto-Fix Bluetooth Audio Bug"
+                android:textColor="@color/hud_text_primary"
+                android:textSize="13sp" />
+
+            <!-- Save Settings Button -->
             <Button
                 android:id="@+id/btnSaveSettings"
-                style="@style/Widget.Material3.Button"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="44dp"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="@color/rapido_yellow"
+                android:backgroundTint="@color/samsung_mint"
                 android:text="SAVE SETTINGS"
-                android:textColor="@color/rapido_black"
+                android:textColor="#000000"
+                android:textSize="12sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Simulator & Test Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="sans-serif-bold"
-            android:letterSpacing="0.06"
-            android:text="RIDE OFFER SIMULATOR"
-            android:textColor="@color/hud_text_secondary"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/btnOpenSimulator"
-            style="@style/Widget.Material3.Button"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/hud_surface"
-            android:fontFamily="sans-serif-black"
-            android:letterSpacing="0.05"
-            android:text="🚀 LAUNCH RIDE SIMULATOR"
-            android:textColor="@color/hud_cyan"
-            app:strokeColor="@color/hud_cyan"
-            app:strokeWidth="1.5dp" />
+            android:layout_height="32dp" />
 
-        <Button
-            android:id="@+id/btnTestAudioFix"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp"
-            android:text="🔊 TEST AUDIO BUG FIXER"
-            android:textColor="@color/hud_text_primary"
-            app:strokeColor="@color/hud_border" />
     </LinearLayout>
 </ScrollView>

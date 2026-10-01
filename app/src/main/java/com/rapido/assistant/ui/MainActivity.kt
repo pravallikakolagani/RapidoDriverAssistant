@@ -3,6 +3,7 @@ package com.rapido.assistant.ui
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -10,20 +11,22 @@ import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import com.rapido.assistant.R
 import com.rapido.assistant.audio.AudioBugFixer
 import com.rapido.assistant.data.DriverPreferences
 import com.rapido.assistant.databinding.ActivityMainBinding
-import com.rapido.assistant.service.RapidoAccessibilityService
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var preferences: DriverPreferences
+
+    companion object {
+        private const val PERM_REQUEST_CODE = 101
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,13 @@ class MainActivity : AppCompatActivity() {
 
         preferences = DriverPreferences(this)
 
+        requestRequiredPermissions()
+        updateDeviceLocation()
+        setupListeners()
+        loadPreferences()
+    }
+
+    private fun requestRequiredPermissions() {
         val requiredPerms = mutableListOf<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
@@ -46,12 +56,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (requiredPerms.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, requiredPerms.toTypedArray(), 101)
+            ActivityCompat.requestPermissions(this, requiredPerms.toTypedArray(), PERM_REQUEST_CODE)
         }
-
-        updateDeviceLocation()
-        setupListeners()
-        loadPreferences()
     }
 
     private fun updateDeviceLocation() {
@@ -85,14 +91,13 @@ class MainActivity : AppCompatActivity() {
         binding.switchAutoAccept.isChecked = preferences.autoAccept
         binding.switchVoice.isChecked = preferences.voiceEnabled
         binding.switchOverlay.isChecked = preferences.overlayEnabled
-        binding.switchSkipNight.isChecked = preferences.skipNightRides
         binding.switchAudioBugFix.isChecked = preferences.autoFixAudioBug
 
         binding.etHomeAddress.setText(preferences.homeAddress)
     }
 
     private fun setupListeners() {
-        // Slider listeners
+        // Sliders
         binding.sliderMinFare.addOnChangeListener { _, value, _ ->
             binding.tvMinFareValue.text = "₹${value.toInt()}"
         }
@@ -101,13 +106,25 @@ class MainActivity : AppCompatActivity() {
             binding.tvMaxPickupValue.text = String.format("%.1f km", value)
         }
 
-        // Permission Buttons
-        binding.btnEnableAccessibility.setOnClickListener {
-            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            startActivity(intent)
+        // Dedicated Hero Demo Card & Button
+        binding.cardLaunchDemo.setOnClickListener {
+            startActivity(Intent(this, SimulatorActivity::class.java))
+        }
+        binding.btnOpenSimulator.setOnClickListener {
+            startActivity(Intent(this, SimulatorActivity::class.java))
         }
 
-        binding.btnEnableOverlay.setOnClickListener {
+        // Quick Audio Fix Button in Header
+        binding.btnQuickAudioFix.setOnClickListener {
+            AudioBugFixer.fixNavigationAudio(this, showToast = true)
+        }
+
+        // Interactive Sensor & Permission Tiles (Tap to toggle / grant)
+        binding.tileAccessibility.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        }
+
+        binding.tileOverlay.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val intent = Intent(
                     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -117,16 +134,27 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnEnableNotification.setOnClickListener {
-            val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-            startActivity(intent)
+        binding.tileNotification.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
         }
 
-        binding.btnOpenAppInfo.setOnClickListener {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.parse("package:$packageName")
+        binding.tileLocation.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        android.Manifest.permission.ACCESS_FINE_LOCATION,
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
+                    PERM_REQUEST_CODE
+                )
+            } else {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
         }
 
         // Save Settings
@@ -136,68 +164,62 @@ class MainActivity : AppCompatActivity() {
             preferences.autoAccept = binding.switchAutoAccept.isChecked
             preferences.voiceEnabled = binding.switchVoice.isChecked
             preferences.overlayEnabled = binding.switchOverlay.isChecked
-            preferences.skipNightRides = binding.switchSkipNight.isChecked
             preferences.autoFixAudioBug = binding.switchAudioBugFix.isChecked
             preferences.homeAddress = binding.etHomeAddress.text.toString().trim()
 
-            Toast.makeText(this, "Settings Saved Successfully!", Toast.LENGTH_SHORT).show()
-        }
-
-        // Open Simulator
-        binding.btnOpenSimulator.setOnClickListener {
-            startActivity(Intent(this, SimulatorActivity::class.java))
-        }
-        binding.btnQuickLaunchSimulator.setOnClickListener {
-            startActivity(Intent(this, SimulatorActivity::class.java))
-        }
-
-        // Test Audio Bug Fix
-        binding.btnTestAudioFix.setOnClickListener {
-            AudioBugFixer.fixNavigationAudio(this, showToast = true)
+            Toast.makeText(this, "Strategy Settings Saved Successfully!", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun updatePermissionStatuses() {
+        val mintColor = ContextCompat.getColor(this, R.color.samsung_mint)
+        val amberColor = ContextCompat.getColor(this, R.color.samsung_amber)
+
         // Accessibility
         val isA11yEnabled = isAccessibilityServiceRunning()
         if (isA11yEnabled) {
-            binding.tvAccessibilityStatus.text = "ACTIVE (Running & Scanning)"
-            binding.tvAccessibilityStatus.setTextColor(ContextCompat.getColor(this, R.color.hud_neon_green))
-            binding.btnEnableAccessibility.isEnabled = false
-            binding.btnEnableAccessibility.text = "ACTIVE"
+            binding.tvAccessibilityStatus.text = "Active"
+            binding.tvAccessibilityStatus.setTextColor(mintColor)
         } else {
-            binding.tvAccessibilityStatus.text = "DISABLED (Tap ENABLE to activate)"
-            binding.tvAccessibilityStatus.setTextColor(ContextCompat.getColor(this, R.color.hud_crimson_red))
-            binding.btnEnableAccessibility.isEnabled = true
-            binding.btnEnableAccessibility.text = "ENABLE"
+            binding.tvAccessibilityStatus.text = "Tap to Enable"
+            binding.tvAccessibilityStatus.setTextColor(amberColor)
         }
 
         // Overlay
-        val isOverlayEnabled = Settings.canDrawOverlays(this)
-        if (isOverlayEnabled) {
-            binding.tvOverlayStatus.text = "ACTIVE (HUD Allowed)"
-            binding.tvOverlayStatus.setTextColor(ContextCompat.getColor(this, R.color.hud_neon_green))
-            binding.btnEnableOverlay.isEnabled = false
-            binding.btnEnableOverlay.text = "ACTIVE"
+        val isOverlayEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Settings.canDrawOverlays(this)
         } else {
-            binding.tvOverlayStatus.text = "DISABLED (Tap ENABLE to allow)"
-            binding.tvOverlayStatus.setTextColor(ContextCompat.getColor(this, R.color.hud_crimson_red))
-            binding.btnEnableOverlay.isEnabled = true
-            binding.btnEnableOverlay.text = "ENABLE"
+            true
+        }
+        if (isOverlayEnabled) {
+            binding.tvOverlayStatus.text = "Allowed"
+            binding.tvOverlayStatus.setTextColor(mintColor)
+        } else {
+            binding.tvOverlayStatus.text = "Tap to Allow"
+            binding.tvOverlayStatus.setTextColor(amberColor)
         }
 
         // Notification
         val isNotificationEnabled = NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)
         if (isNotificationEnabled) {
-            binding.tvNotificationStatus.text = "ACTIVE (Listening for pings)"
-            binding.tvNotificationStatus.setTextColor(ContextCompat.getColor(this, R.color.hud_neon_green))
-            binding.btnEnableNotification.isEnabled = false
-            binding.btnEnableNotification.text = "ACTIVE"
+            binding.tvNotificationStatus.text = "Listening"
+            binding.tvNotificationStatus.setTextColor(mintColor)
         } else {
-            binding.tvNotificationStatus.text = "DISABLED (Tap ENABLE for background alerts)"
-            binding.tvNotificationStatus.setTextColor(ContextCompat.getColor(this, R.color.hud_crimson_red))
-            binding.btnEnableNotification.isEnabled = true
-            binding.btnEnableNotification.text = "ENABLE"
+            binding.tvNotificationStatus.text = "Tap to Enable"
+            binding.tvNotificationStatus.setTextColor(amberColor)
+        }
+
+        // Location
+        val isLocationEnabled = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+        if (isLocationEnabled) {
+            binding.tvLocationStatus.text = "Synced"
+            binding.tvLocationStatus.setTextColor(mintColor)
+        } else {
+            binding.tvLocationStatus.text = "Tap to Grant"
+            binding.tvLocationStatus.setTextColor(amberColor)
         }
     }
 

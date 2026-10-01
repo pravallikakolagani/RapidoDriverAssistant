@@ -7,20 +7,25 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.rapido.assistant.R
 import com.rapido.assistant.audio.AudioBugFixer
+import com.rapido.assistant.data.DriverPreferences
 import com.rapido.assistant.databinding.ActivitySimulatorBinding
 import com.rapido.assistant.service.RapidoAccessibilityService
 
 class SimulatorActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySimulatorBinding
+    private lateinit var preferences: DriverPreferences
+    private var countdownTimer: CountDownTimer? = null
 
     private val simClickReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -40,6 +45,8 @@ class SimulatorActivity : AppCompatActivity() {
         binding = ActivitySimulatorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        preferences = DriverPreferences(this)
+
         val filter = IntentFilter().apply {
             addAction(RapidoAccessibilityService.ACTION_CLICK_ACCEPT)
             addAction(RapidoAccessibilityService.ACTION_CLICK_REJECT)
@@ -50,95 +57,159 @@ class SimulatorActivity : AppCompatActivity() {
             registerReceiver(simClickReceiver, filter)
         }
 
-        setupPresets()
+        setupNavigation()
+        setupScenarios()
         setupActions()
+
+        // Load initial scenario (Prime Surge)
+        loadScenario(145.0, 1.1, "Indiranagar 100ft Road", "Prime Surge")
     }
 
-    private fun setupPresets() {
-        // P1: Towards Home (Indiranagar, ₹120, 1.2 km -> Auto-Accept)
-        binding.btnPresetTowards.setOnClickListener {
-            binding.etSimFare.setText("120")
-            binding.etSimPickup.setText("1.2")
-            binding.etSimDrop.setText("Indiranagar 100ft Road")
-            Toast.makeText(this, "Loaded Preset 1: Towards Home", Toast.LENGTH_SHORT).show()
+    private fun setupNavigation() {
+        binding.btnBackToDashboard.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun setupScenarios() {
+        // Scenario 1: Prime Surge
+        binding.chipPrime.setOnClickListener {
+            loadScenario(145.0, 1.1, "Indiranagar 100ft Road", "Prime Surge")
         }
 
-        // P2: Away from Home (Whitefield, ₹80, 2.5 km -> Auto-Reject)
-        binding.btnPresetAway.setOnClickListener {
-            binding.etSimFare.setText("80")
-            binding.etSimPickup.setText("2.5")
-            binding.etSimDrop.setText("Whitefield ITPL Main Road")
-            Toast.makeText(this, "Loaded Preset 2: Away from Home", Toast.LENGTH_SHORT).show()
+        // Scenario 2: Money Trap
+        binding.chipTrap.setOnClickListener {
+            loadScenario(35.0, 4.8, "Whitefield Outer Ring", "Money Trap")
         }
 
-        // P3: Too Far (Electronic City, ₹150, 7.5 km -> Auto-Reject)
-        binding.btnPresetTooFar.setOnClickListener {
-            binding.etSimFare.setText("150")
-            binding.etSimPickup.setText("7.5")
-            binding.etSimDrop.setText("Electronic City Phase 1")
-            Toast.makeText(this, "Loaded Preset 3: Too Far", Toast.LENGTH_SHORT).show()
+        // Scenario 3: Marginal
+        binding.chipMarginal.setOnClickListener {
+            loadScenario(65.0, 2.9, "Koramangala 5th Block", "Marginal")
         }
 
-        // P4: Low Fare (Koramangala, ₹25, 0.8 km -> Auto-Reject)
-        binding.btnPresetLowFare.setOnClickListener {
-            binding.etSimFare.setText("25")
-            binding.etSimPickup.setText("0.8")
-            binding.etSimDrop.setText("Koramangala 4th Block")
-            Toast.makeText(this, "Loaded Preset 4: Low Fare", Toast.LENGTH_SHORT).show()
+        // Scenario 4: Rain Surge
+        binding.chipRain.setOnClickListener {
+            loadScenario(210.0, 0.8, "MG Road Metro", "Rain Surge")
         }
+
+        // Custom parameters trigger
+        binding.btnSimulateCustom.setOnClickListener {
+            val fare = binding.etSimFare.text.toString().toDoubleOrNull() ?: 100.0
+            val pickup = binding.etSimPickup.text.toString().toDoubleOrNull() ?: 1.5
+            val drop = binding.etSimDrop.text.toString().ifBlank { "Destination Point" }
+            loadScenario(fare, pickup, drop, "Custom Ride")
+        }
+    }
+
+    private fun loadScenario(fare: Double, pickup: Double, drop: String, scenarioName: String) {
+        // Update input fields
+        binding.etSimFare.setText(fare.toInt().toString())
+        binding.etSimPickup.setText(pickup.toString())
+        binding.etSimDrop.setText(drop)
+
+        // Update live card
+        binding.tvMockFare.text = "₹${fare.toInt()}"
+        val estTripDistance = 4.2
+        val totalDistance = pickup + estTripDistance
+        val ratePerKm = fare / totalDistance
+        binding.tvMockRate.text = String.format("₹%.1f / km", ratePerKm)
+        val mins = (pickup * 2.8).toInt().coerceAtLeast(1)
+        binding.tvMockPickup.text = "$pickup km away ($mins mins)"
+        binding.tvMockDrop.text = drop
+
+        // AI Strategy Evaluation
+        val meetsFare = fare >= preferences.minFare
+        val meetsPickup = pickup <= preferences.maxPickupDistanceKm
+        val isProfitable = meetsFare && meetsPickup
+
+        val mintColor = ContextCompat.getColor(this, R.color.samsung_mint)
+        val redColor = ContextCompat.getColor(this, R.color.hud_crimson_red)
+
+        if (isProfitable) {
+            val score = (88 + (ratePerKm * 1.5)).toInt().coerceIn(85, 99)
+            binding.tvAiRecommendationBadge.text = "🛡️ AI EVALUATION: HIGH PROFIT · ACCEPT"
+            binding.tvAiRecommendationBadge.setTextColor(mintColor)
+            binding.tvAiRecommendationBadge.background.setTint(Color.parseColor("#3010B981"))
+            binding.tvAiScore.text = "Score: $score/100"
+            binding.tvAiScore.setTextColor(mintColor)
+            binding.tvMockResultStatus.text = "Eligible for Auto-Accept: Deadhead ${pickup}km ≤ max ${preferences.maxPickupDistanceKm}km, Fare ₹${fare.toInt()} ≥ min ₹${preferences.minFare.toInt()}"
+            binding.tvMockResultStatus.setTextColor(ContextCompat.getColor(this, R.color.hud_text_secondary))
+        } else {
+            val score = (fare / pickup * 2).toInt().coerceIn(12, 45)
+            binding.tvAiRecommendationBadge.text = "🛑 AI EVALUATION: MONEY TRAP · SKIP"
+            binding.tvAiRecommendationBadge.setTextColor(redColor)
+            binding.tvAiRecommendationBadge.background.setTint(Color.parseColor("#30FF1744"))
+            binding.tvAiScore.text = "Score: $score/100"
+            binding.tvAiScore.setTextColor(redColor)
+            binding.tvMockResultStatus.text = "Warning: Exceeds deadhead limit or below min fare threshold (Profit rate ₹${String.format("%.1f", ratePerKm)}/km)"
+            binding.tvMockResultStatus.setTextColor(redColor)
+        }
+
+        // Broadcast to Accessibility Service / Floating HUD
+        val simIntent = Intent(RapidoAccessibilityService.ACTION_SIMULATE_OFFER).apply {
+            putExtra("fare", fare)
+            putExtra("pickup", pickup)
+            putExtra("drop", drop)
+        }
+        sendBroadcast(simIntent)
+
+        // Start 15s Countdown
+        startCountdown(isProfitable)
+        Toast.makeText(this, "Loaded: $scenarioName", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun startCountdown(isProfitable: Boolean) {
+        countdownTimer?.cancel()
+        val totalMs = 15000L
+        binding.progressBarCountdown.max = 100
+        binding.progressBarCountdown.progress = 100
+
+        countdownTimer = object : CountDownTimer(totalMs, 100) {
+            override fun onTick(millisUntilFinished: Long) {
+                val progress = ((millisUntilFinished.toFloat() / totalMs) * 100).toInt()
+                binding.progressBarCountdown.progress = progress
+                val secs = (millisUntilFinished / 1000) + 1
+                binding.tvTimerCountdown.text = "⏱️ ${secs}s"
+
+                // Auto-accept demonstration trigger at 11s if profitable and auto-accept is enabled
+                if (isProfitable && preferences.autoAccept && secs == 12L) {
+                    binding.tvMockResultStatus.text = "⚡ Auto-Accepting matching order in 1s..."
+                }
+            }
+
+            override fun onFinish() {
+                binding.progressBarCountdown.progress = 0
+                binding.tvTimerCountdown.text = "⏱️ Expired"
+                binding.tvMockResultStatus.text = "⚠️ Offer expired without driver response"
+            }
+        }.start()
     }
 
     private fun setupActions() {
-        // Launch mock screen
-        binding.btnLaunchSimScreen.setOnClickListener {
-            val fare = binding.etSimFare.text.toString().trim()
-            val pickup = binding.etSimPickup.text.toString().trim()
-            val drop = binding.etSimDrop.text.toString().trim()
-
-            binding.tvMockFare.text = "₹$fare"
-            binding.tvMockPickup.text = "$pickup km away"
-            binding.tvMockDrop.text = drop
-            binding.tvMockResultStatus.text = "Screen active: Waiting for Accessibility Service..."
-            binding.tvMockResultStatus.setTextColor(getColor(R.color.hud_amber))
-
-            binding.panelSimulatorControls.visibility = View.GONE
-            binding.mockRapidoScreen.visibility = View.VISIBLE
-
-            // Broadcast offer to RapidoAutomationService
-            val simIntent = Intent(RapidoAccessibilityService.ACTION_SIMULATE_OFFER).apply {
-                putExtra("fare", fare.toDoubleOrNull() ?: 120.0)
-                putExtra("pickup", pickup.toDoubleOrNull() ?: 1.2)
-                putExtra("drop", drop)
-            }
-            sendBroadcast(simIntent)
-        }
-
-        // Exit mock screen
-        binding.btnExitMockScreen.setOnClickListener {
-            binding.mockRapidoScreen.visibility = View.GONE
-            binding.panelSimulatorControls.visibility = View.VISIBLE
-        }
-
-        // Mock Accept Clicked
+        // Accept button
         binding.btnMockAccept.setOnClickListener {
-            binding.tvMockResultStatus.text = "🎉 Ride Successfully ACCEPTED!"
-            binding.tvMockResultStatus.setTextColor(getColor(R.color.hud_neon_green))
-            Toast.makeText(this, "CLICK DETECTED: Ride Accepted", Toast.LENGTH_SHORT).show()
+            countdownTimer?.cancel()
+            binding.tvTimerCountdown.text = "⏱️ ACCEPTED"
+            binding.tvMockResultStatus.text = "🎉 RIDE ACCEPTED! Order dispatched to Captain."
+            binding.tvMockResultStatus.setTextColor(ContextCompat.getColor(this, R.color.samsung_mint))
+            Toast.makeText(this, "Order Accepted!", Toast.LENGTH_SHORT).show()
         }
 
-        // Mock Reject Clicked
+        // Reject button
         binding.btnMockReject.setOnClickListener {
-            binding.tvMockResultStatus.text = "❌ Ride REJECTED / SKIPPED"
-            binding.tvMockResultStatus.setTextColor(getColor(R.color.hud_crimson_red))
-            Toast.makeText(this, "CLICK DETECTED: Ride Rejected", Toast.LENGTH_SHORT).show()
+            countdownTimer?.cancel()
+            binding.tvTimerCountdown.text = "⏱️ SKIPPED"
+            binding.tvMockResultStatus.text = "❌ RIDE SKIPPED! Screen reset to standby."
+            binding.tvMockResultStatus.setTextColor(ContextCompat.getColor(this, R.color.hud_crimson_red))
+            Toast.makeText(this, "Order Skipped", Toast.LENGTH_SHORT).show()
         }
 
-        // Trigger Notification Simulation
+        // Push notification simulation
         binding.btnTriggerSimNotification.setOnClickListener {
             sendSimulatedNotification()
         }
 
-        // Simulate Map Audio Bug
+        // Audio routing test
         binding.btnSimulateMapAudio.setOnClickListener {
             AudioBugFixer.fixNavigationAudio(this, showToast = true)
         }
@@ -171,13 +242,13 @@ class SimulatorActivity : AppCompatActivity() {
         )
 
         val notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(android.R.drawable.ic_dialog_map)
+            .setSmallIcon(R.drawable.ic_app_icon)
             .setContentTitle("Rapido Captain: New Ride Request")
             .setContentText("₹$fare • $pickup km • Drop: $drop")
             .setStyle(NotificationCompat.BigTextStyle().bigText("₹$fare • $pickup km away\nDrop to: $drop"))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
-            .addAction(android.R.drawable.ic_input_add, "Accept", pAccept)
+            .addAction(R.drawable.ic_app_icon, "Accept", pAccept)
             .build()
 
         nm.notify(9001, notification)
@@ -186,6 +257,7 @@ class SimulatorActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        countdownTimer?.cancel()
         try {
             unregisterReceiver(simClickReceiver)
         } catch (e: Exception) {

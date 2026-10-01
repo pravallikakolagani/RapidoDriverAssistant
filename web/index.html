@@ -3,31 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rapido Driver Assistant - Tactical HUD & Simulator</title>
+  <title>Rapido Driver Assistant - Smart Dashboard</title>
   <style>
     :root {
-      --bg-dark: #0A0D14;
-      --card-bg: #121620;
-      --card-surface: #1B212D;
-      --card-highlight: #232B3A;
-      --neon-green: #00E676;
-      --neon-green-glow: rgba(0, 230, 118, 0.4);
-      --crimson-red: #FF1744;
-      --crimson-red-glow: rgba(255, 23, 68, 0.4);
-      --amber-yellow: #FFAB00;
-      --cyan-blue: #00E5FF;
-      --cyan-glow: rgba(0, 229, 255, 0.35);
-      --rapido-yellow: #F9A825;
-      --text-main: #FFFFFF;
-      --text-muted: #8B949E;
-      --border-color: #2D3544;
+      --bg-main: #0B0F19;
+      --card-bg: #151D2E;
+      --card-surface: #1E293B;
+      --card-border: rgba(255, 255, 255, 0.08);
+      
+      /* Samsung Health / Google Health Inspired Accents */
+      --mint-green: #10B981;
+      --mint-glow: rgba(16, 185, 129, 0.35);
+      --electric-blue: #3B82F6;
+      --blue-glow: rgba(59, 130, 246, 0.35);
+      --amber-accent: #F59E0B;
+      --amber-glow: rgba(245, 158, 11, 0.35);
+      --crimson-red: #EF4444;
+      --rapido-yellow: #FBBF24;
+      
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -39,8 +42,8 @@
     }
 
     body {
-      background: var(--bg-dark);
-      color: var(--text-main);
+      background: var(--bg-main);
+      color: var(--text-primary);
       min-height: 100vh;
       overflow-x: hidden;
       overflow-y: auto !important;
@@ -48,147 +51,455 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px 10px 120px 10px;
+      padding: 14px 14px 100px 14px;
     }
 
-    .container {
+    .app-viewport {
       width: 100%;
       max-width: 480px;
       display: flex;
       flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    /* Top Profile & Status Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 2px;
+    }
+
+    .profile-group {
+      display: flex;
+      align-items: center;
       gap: 12px;
     }
 
-    .header {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
+    .avatar-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #F59E0B, #D97706);
       border-radius: 14px;
-      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    }
+
+    .profile-details h2 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .status-chip {
+      font-size: 11px;
+      color: var(--mint-green);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--mint-green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--mint-green);
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .btn-icon-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    /* Samsung Health Style Activity Rings Card */
+    .health-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-secondary);
+    }
+
+    .card-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--mint-green);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .rings-content {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      gap: 14px;
     }
 
-    .header-title {
+    .rings-svg-wrap {
+      width: 140px;
+      height: 140px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .rings-svg-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.06);
+    }
+
+    .ring-val {
+      fill: none;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    .rings-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .rings-center-text .score {
+      font-size: 26px;
+      font-weight: 900;
+      color: #FFF;
+      letter-spacing: -0.5px;
+    }
+
+    .rings-center-text .label {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .metrics-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-grow: 1;
+    }
+
+    .metric-row {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .app-icon {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, #F9A825, #FF8F00);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #000;
-      font-size: 20px;
-      box-shadow: 0 0 15px rgba(249, 168, 37, 0.5);
+    .metric-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 4px;
+      flex-shrink: 0;
     }
 
-    .header-text h1 {
+    .metric-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-val {
       font-size: 15px;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      color: #FFF;
     }
 
-    .header-text p {
+    .metric-desc {
       font-size: 11px;
-      color: var(--neon-green);
-      display: flex;
-      align-items: center;
-      gap: 5px;
+      color: var(--text-secondary);
       font-weight: 600;
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--neon-green);
-      border-radius: 50%;
-      display: inline-block;
-      box-shadow: 0 0 10px var(--neon-green);
-      animation: pulse 1.8s infinite;
+    /* Icon-Driven Status Grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
 
-    @keyframes pulse {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.15); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.8; }
-    }
-
-    .header-actions {
+    .status-tile {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 14px;
       display: flex;
-      gap: 6px;
-    }
-
-    .btn-action-pill {
-      background: rgba(0, 229, 255, 0.1);
-      border: 1px solid var(--cyan-blue);
-      color: var(--cyan-blue);
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
+      align-items: center;
+      gap: 12px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      transition: all 0.2s;
     }
 
-    .gps-banner {
-      background: rgba(0, 229, 255, 0.08);
-      border: 1px solid rgba(0, 229, 255, 0.3);
+    .status-tile:active {
+      transform: scale(0.97);
+    }
+
+    .tile-icon {
+      width: 40px;
+      height: 40px;
       border-radius: 12px;
-      padding: 10px 12px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
+      justify-content: center;
+      font-size: 19px;
+      flex-shrink: 0;
     }
 
-    .gps-info {
+    .tile-texts {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .gps-title {
+    .tile-title {
+      font-size: 13px;
       font-weight: 800;
-      color: var(--cyan-blue);
+      color: #FFF;
+    }
+
+    .tile-status {
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Hero Demo Mode Card */
+    .hero-demo-card {
+      background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+      border: 1.5px solid rgba(59, 130, 246, 0.4);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px var(--blue-glow);
       display: flex;
       align-items: center;
-      gap: 5px;
-    }
-
-    .gps-coords {
-      color: var(--text-muted);
-      font-size: 10px;
-      font-family: monospace;
-    }
-
-    .btn-gps-toggle {
-      background: var(--cyan-blue);
-      color: #000;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-weight: 800;
-      font-size: 11px;
+      justify-content: space-between;
+      gap: 14px;
       cursor: pointer;
-      box-shadow: 0 0 10px var(--cyan-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
+    .hero-demo-card:active {
+      transform: scale(0.98);
+    }
+
+    .hero-demo-text h3 {
+      font-size: 17px;
+      font-weight: 900;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-demo-text p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .btn-launch-demo {
+      background: linear-gradient(135deg, var(--electric-blue), #2563EB);
+      color: #FFF;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Driver Strategy Sliders Card */
+    .settings-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .slider-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slider-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .slider-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+    }
+
+    .slider-value {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--mint-green);
+    }
+
+    input[type='range'] {
+      width: 100%;
+      height: 6px;
+      border-radius: 6px;
+      background: var(--card-surface);
+      accent-color: var(--mint-green);
+      cursor: pointer;
+    }
+
+    /* DEDICATED DEMO MODE VIEW / MODAL (FULL SCREEN) */
+    .demo-view {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: var(--bg-main);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 14px 90px 14px;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .demo-view.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .demo-container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Demo Header with Back Arrow */
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+
+    .btn-back {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: #FFF;
+      padding: 8px 14px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .demo-header-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--text-primary);
+    }
+
+    /* Horizontal Scenario Selector Chips */
+    .scenarios-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .scenarios-scroll::-webkit-scrollbar { display: none; }
+
+    .scenario-chip {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      color: var(--text-secondary);
+      padding: 10px 16px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .scenario-chip.selected {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--electric-blue);
+      color: #FFF;
+      box-shadow: 0 0 15px var(--blue-glow);
+    }
+
+    /* Floating HUD Card in Demo */
     .hud-card {
       background: rgba(14, 18, 26, 0.95);
-      border: 2px solid var(--neon-green);
-      border-radius: 16px;
-      padding: 14px 16px;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 20px var(--neon-green-glow);
+      border: 2px solid var(--mint-green);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 20px var(--mint-glow);
       backdrop-filter: blur(10px);
     }
 
@@ -196,52 +507,38 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .hud-badge {
       font-size: 11px;
       font-weight: 900;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       padding: 4px 10px;
       border-radius: 6px;
       text-transform: uppercase;
     }
 
-    .badge-accept {
-      background: rgba(0, 230, 118, 0.15);
-      color: var(--neon-green);
-      border: 1px solid var(--neon-green);
-    }
-
-    .badge-reject {
-      background: rgba(255, 23, 68, 0.15);
-      color: var(--crimson-red);
-      border: 1px solid var(--crimson-red);
-    }
-
-    .badge-manual {
-      background: rgba(255, 171, 0, 0.15);
-      color: var(--amber-yellow);
-      border: 1px solid var(--amber-yellow);
-    }
+    .badge-accept { background: rgba(16, 185, 129, 0.2); color: var(--mint-green); border: 1px solid var(--mint-green); }
+    .badge-reject { background: rgba(239, 68, 68, 0.2); color: var(--crimson-red); border: 1px solid var(--crimson-red); }
+    .badge-manual { background: rgba(245, 158, 11, 0.2); color: var(--amber-accent); border: 1px solid var(--amber-accent); }
 
     .hud-stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       background: rgba(0, 0, 0, 0.4);
-      padding: 10px;
-      border-radius: 10px;
+      padding: 12px;
+      border-radius: 14px;
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       border: 1px solid rgba(255,255,255,0.06);
     }
 
     .stat-box .val {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 900;
-      color: var(--text-main);
+      color: #FFF;
     }
 
     .stat-box .lbl {
@@ -261,27 +558,27 @@
       font-weight: 700;
       margin-bottom: 10px;
       background: rgba(255,255,255,0.04);
-      padding: 6px 10px;
-      border-radius: 6px;
+      padding: 8px 12px;
+      border-radius: 8px;
     }
 
     .compass-needle {
       display: inline-block;
       transition: transform 0.5s ease;
-      font-size: 15px;
+      font-size: 16px;
     }
 
     .hud-progress-wrap {
       background: rgba(255, 255, 255, 0.12);
-      height: 5px;
-      border-radius: 5px;
+      height: 6px;
+      border-radius: 6px;
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .hud-progress-bar {
       height: 100%;
-      background: var(--neon-green);
+      background: var(--mint-green);
       width: 100%;
       transition: width 0.08s linear;
     }
@@ -292,77 +589,43 @@
       text-align: center;
     }
 
-    .radar-container {
-      background: #0E121B;
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 12px;
+    /* Radar Canvas inside Demo */
+    .radar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .radar-canvas {
       width: 100%;
       max-width: 320px;
-      height: 160px;
-      border-radius: 10px;
+      height: 150px;
+      border-radius: 12px;
       background: #080A10;
     }
 
-    .radar-legend {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 700;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .dot-green { width: 8px; height: 8px; background: var(--neon-green); border-radius: 50%; }
-    .dot-yellow { width: 8px; height: 8px; background: var(--rapido-yellow); border-radius: 50%; }
-    .dot-blue { width: 8px; height: 8px; background: var(--cyan-blue); border-radius: 50%; }
-
-    .phone-screen {
-      background: #141720;
-      border: 1.5px solid #2B3342;
-      border-radius: 18px;
-      padding: 14px;
-    }
-
-    .rapido-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: var(--rapido-yellow);
-      font-weight: 800;
-    }
-
+    /* Simulated Phone Ride Offer Card */
     .ride-card {
-      background: #1F2533;
-      border-radius: 14px;
-      padding: 14px;
-      border: 1px solid #323C50;
-      margin: 10px 0;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px solid var(--card-border);
     }
 
     .ride-fare-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .ride-fare {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 900;
       color: #FFF;
     }
@@ -370,20 +633,20 @@
     .ride-tag {
       background: var(--rapido-yellow);
       color: #000;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 900;
-      padding: 3px 8px;
-      border-radius: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
     }
 
     .ride-detail {
-      font-size: 12px;
-      color: #D1D5DB;
+      font-size: 13px;
+      color: #CBD5E1;
       margin: 6px 0;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .btn-row {
@@ -394,24 +657,16 @@
 
     .btn-action {
       flex: 1;
-      padding: 13px;
-      border-radius: 10px;
+      padding: 14px;
+      border-radius: 12px;
       border: none;
       font-weight: 800;
       font-size: 13px;
       cursor: pointer;
     }
 
-    .btn-accept {
-      background: var(--rapido-yellow);
-      color: #000;
-    }
-
-    .btn-reject {
-      background: #2D3546;
-      color: #FFF;
-      border: 1px solid #3F4A5E;
-    }
+    .btn-accept { background: var(--rapido-yellow); color: #000; }
+    .btn-reject { background: var(--card-surface); color: #FFF; border: 1px solid var(--card-border); }
 
     .auto-click-ripple {
       animation: ripple 0.7s ease-out;
@@ -423,413 +678,284 @@
       100% { box-shadow: 0 0 0 0 rgba(249, 168, 37, 0); }
     }
 
-    .panel {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 14px;
-    }
-
-    .panel-title {
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .presets-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .btn-preset {
-      background: var(--card-surface);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .btn-preset span.badge {
-      font-size: 9px;
-      font-weight: 800;
-      padding: 2px 5px;
-      border-radius: 4px;
-      width: fit-content;
-      margin-top: 4px;
-    }
-
-    .badge-green { background: rgba(0,230,118,0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
-    .badge-red { background: rgba(255,23,68,0.2); color: var(--crimson-red); border: 1px solid var(--crimson-red); }
-    .badge-yellow { background: rgba(255,171,0,0.2); color: var(--amber-yellow); border: 1px solid var(--amber-yellow); }
-
-    .custom-inputs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .input-box {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .input-box label {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .input-box input, .input-box select {
-      background: var(--card-surface);
-      border: 1px solid var(--border-color);
-      color: #FFF;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      outline: none;
-    }
-
-    .btn-dispatch {
-      grid-column: span 2;
-      background: linear-gradient(135deg, var(--cyan-blue), #00B0FF);
-      color: #000;
-      border: none;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 800;
-      font-size: 12px;
-      cursor: pointer;
-      margin-top: 4px;
-    }
-
-    .settings-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .setting-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .slider-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    input[type='range'] {
-      width: 100%;
-      accent-color: var(--neon-green);
-      cursor: pointer;
-    }
-
-    .toggle-switch {
-      position: relative;
-      width: 44px;
-      height: 24px;
-    }
-
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .toggle-slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #2D3546;
-      border-radius: 24px;
-      transition: .3s;
-    }
-
-    .toggle-slider:before {
-      position: absolute;
-      content: '';
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      border-radius: 50%;
-      transition: .3s;
-    }
-
-    input:checked + .toggle-slider {
-      background-color: var(--neon-green);
-    }
-
-    input:checked + .toggle-slider:before {
-      transform: translateX(20px);
-    }
-
+    /* Toast Notification */
     .toast {
       position: fixed;
       bottom: 24px;
-      background: rgba(10, 14, 22, 0.92);
-      border: 1.5px solid var(--neon-green);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1.5px solid var(--mint-green);
       color: #FFF;
       padding: 10px 20px;
       border-radius: 30px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       display: none;
-      z-index: 100;
+      z-index: 2000;
       text-align: center;
-    }
-
-    /* Tactical Boot Splash Screen */
-    .splash-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: radial-gradient(circle at center, #111520 0%, #06080C 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 99999;
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
-    }
-    .splash-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      display: none !important;
-    }
-    .splash-logo-wrap {
-      position: relative;
-      margin-bottom: 16px;
-    }
-    .splash-logo {
-      width: 76px;
-      height: 76px;
-      background: linear-gradient(135deg, #F9A825, #FF8F00);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      font-weight: 900;
-      color: #000;
-      box-shadow: 0 0 35px rgba(249, 168, 37, 0.7);
-      animation: logoPulse 1.8s infinite ease-in-out;
-    }
-    @keyframes logoPulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(249,168,37,0.5)); }
-      50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(0,230,118,0.7)); }
-    }
-    .splash-title {
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: 1.5px;
-      color: #FFF;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      text-shadow: 0 0 12px rgba(255,255,255,0.4);
-    }
-    .splash-subtitle {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: var(--neon-green);
-      margin-bottom: 24px;
-    }
-    .splash-console {
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 10px 14px;
-      width: 290px;
-      font-family: monospace;
-      font-size: 10px;
-      color: var(--cyan-blue);
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 20px;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
-    }
-    .console-line {
-      display: flex;
-      justify-content: space-between;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .console-line.visible {
-      opacity: 1;
-    }
-    .splash-bar-track {
-      width: 290px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .splash-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--rapido-yellow), var(--neon-green));
-      box-shadow: 0 0 10px var(--neon-green);
-      transition: width 0.2s linear;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.8);
     }
   </style>
 </head>
 <body>
 
-<!-- Tactical Cyberpunk Splash Screen -->
-<div id="splashScreen" class="splash-overlay">
-  <div class="splash-logo-wrap">
-    <div class="splash-logo">R</div>
-  </div>
-  <div class="splash-title">Rapido Assistant</div>
-  <div class="splash-subtitle">TACTICAL DRIVER COCKPIT • v2.4</div>
-  
-  <div class="splash-console">
-    <div class="console-line" id="line1"><span>› KERNEL INIT</span><span style="color:var(--neon-green)">OK</span></div>
-    <div class="console-line" id="line2"><span>› RADAR &amp; SENSORS</span><span style="color:var(--neon-green)">ONLINE</span></div>
-    <div class="console-line" id="line3"><span>› DECISION ALGORITHM</span><span style="color:var(--neon-green)">ACTIVE</span></div>
-    <div class="console-line" id="line4"><span>› HUD COCKPIT</span><span style="color:var(--cyan-blue)">ENGAGED</span></div>
+<div class="app-viewport">
+
+  <!-- Top Profile Bar -->
+  <div class="top-bar">
+    <div class="profile-group">
+      <div class="avatar-icon">🏍️</div>
+      <div class="profile-details">
+        <h2>Captain Dashboard</h2>
+        <div class="status-chip"><span class="pulse-dot"></span> ASSISTANT ACTIVE</div>
+      </div>
+    </div>
+    <button class="btn-icon-pill" id="btnVoiceToggle" onclick="toggleVoice()">
+      <span id="voiceIcon">🔊</span> <span id="voiceText">Voice</span>
+    </button>
   </div>
 
-  <div class="splash-bar-track">
-    <div class="splash-bar-fill" id="splashFill"></div>
+  <!-- Samsung Health Style Activity Rings Card -->
+  <div class="health-card">
+    <div class="card-header-row">
+      <span class="card-title">Today's Shift Targets</span>
+      <span class="card-badge">EFFICIENCY 92%</span>
+    </div>
+
+    <div class="rings-content">
+      <!-- 3-Ring SVG Visualization -->
+      <div class="rings-svg-wrap">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <!-- Outer Ring: Earnings (Mint Green) -->
+          <circle class="ring-bg" cx="70" cy="70" r="58" stroke-width="9" />
+          <circle class="ring-val" cx="70" cy="70" r="58" stroke-width="9" stroke="var(--mint-green)"
+                  stroke-dasharray="364.4" stroke-dashoffset="102" />
+
+          <!-- Middle Ring: Profit Rate (Electric Blue) -->
+          <circle class="ring-bg" cx="70" cy="70" r="45" stroke-width="9" />
+          <circle class="ring-val" cx="70" cy="70" r="45" stroke-width="9" stroke="var(--electric-blue)"
+                  stroke-dasharray="282.7" stroke-dashoffset="65" />
+
+          <!-- Inner Ring: Traps Filtered (Amber) -->
+          <circle class="ring-bg" cx="70" cy="70" r="32" stroke-width="9" />
+          <circle class="ring-val" cx="70" cy="70" r="32" stroke-width="9" stroke="var(--amber-accent)"
+                  stroke-dasharray="201.0" stroke-dashoffset="40" />
+        </svg>
+
+        <div class="rings-center-text">
+          <div class="score">92</div>
+          <div class="label">SCORE</div>
+        </div>
+      </div>
+
+      <!-- Metrics Breakdown -->
+      <div class="metrics-column">
+        <div class="metric-row">
+          <div class="metric-dot" style="background: var(--mint-green);"></div>
+          <div class="metric-info">
+            <span class="metric-val">₹1,450 <span style="font-size: 11px; color: var(--text-muted);">/ ₹2,000</span></span>
+            <span class="metric-desc">Earnings Target</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-dot" style="background: var(--electric-blue);"></div>
+          <div class="metric-info">
+            <span class="metric-val">₹38.2 <span style="font-size: 11px; color: var(--text-muted);">/ km</span></span>
+            <span class="metric-desc">Average Net Rate</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-dot" style="background: var(--amber-accent);"></div>
+          <div class="metric-info">
+            <span class="metric-val">8 Traps Screened</span>
+            <span class="metric-desc">Saved 18 km deadhead</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- Icon-Driven Status Tiles -->
+  <div class="status-grid">
+    <div class="status-tile" onclick="requestDeviceLocation()">
+      <div class="tile-icon" style="background: rgba(59, 130, 246, 0.15); color: var(--electric-blue);">📍</div>
+      <div class="tile-texts">
+        <span class="tile-title">GPS Sensor</span>
+        <span class="tile-status" id="tileGpsStatus" style="color: var(--electric-blue);">Tap to Sync</span>
+      </div>
+    </div>
+
+    <div class="status-tile">
+      <div class="tile-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--mint-green);">🛡️</div>
+      <div class="tile-texts">
+        <span class="tile-title">HUD Overlay</span>
+        <span class="tile-status" style="color: var(--mint-green);">Enabled</span>
+      </div>
+    </div>
+
+    <div class="status-tile" onclick="toggleAudioFx()">
+      <div class="tile-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--amber-accent);">🔔</div>
+      <div class="tile-texts">
+        <span class="tile-title">Sound Chimes</span>
+        <span class="tile-status" id="tileAudioStatus" style="color: var(--amber-accent);">Active</span>
+      </div>
+    </div>
+
+    <div class="status-tile">
+      <div class="tile-icon" style="background: rgba(168, 85, 247, 0.15); color: #C084FC);">♿</div>
+      <div class="tile-texts">
+        <span class="tile-title">Accessibility</span>
+        <span class="tile-status" style="color: #C084FC);">Scanning Node</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated Demo Mode Hero Launcher -->
+  <div class="hero-demo-card" onclick="openDemoMode()">
+    <div class="hero-demo-text">
+      <h3>🚀 Interactive Demo Mode</h3>
+      <p>Simulate rides, test HUD alerts &amp; voice</p>
+    </div>
+    <button class="btn-launch-demo">OPEN DEMO →</button>
+  </div>
+
+  <!-- Driver Strategy Settings -->
+  <div class="settings-card">
+    <div class="card-header-row">
+      <span class="card-title">Driver Thresholds</span>
+      <span style="font-size: 11px; color: var(--electric-blue); font-weight: 700;">Live Auto-Tune</span>
+    </div>
+
+    <div class="slider-item">
+      <div class="slider-top-row">
+        <span class="slider-label">💰 Minimum Fare</span>
+        <span class="slider-value" id="valMinFare">₹40</span>
+      </div>
+      <input type="range" id="sliderMinFare" min="20" max="150" value="40" oninput="updateSettings()">
+    </div>
+
+    <div class="slider-item">
+      <div class="slider-top-row">
+        <span class="slider-label">📏 Max Pickup Deadhead</span>
+        <span class="slider-value" id="valMaxPickup">3.0 km</span>
+      </div>
+      <input type="range" id="sliderMaxPickup" min="1" max="10" step="0.5" value="3.0" oninput="updateSettings()">
+    </div>
+  </div>
+
 </div>
 
-<div class="container">
-  <div class="header">
-    <div class="header-title">
-      <div class="app-icon">R</div>
-      <div class="header-text">
-        <h1>Rapido Driver Assistant</h1>
-        <p><span class="status-dot"></span> TACTICAL HUD ONLINE</p>
+<!-- DEDICATED DEMO MODE SCREEN (SLIDES IN ON CLICK) -->
+<div class="demo-view" id="demoView">
+  <div class="demo-container">
+
+    <!-- Demo Navigation Header -->
+    <div class="demo-header">
+      <button class="btn-back" onclick="closeDemoMode()">← Dashboard</button>
+      <span class="demo-header-title">🎮 Demo Simulation Flow</span>
+      <div style="width: 70px;"></div>
+    </div>
+
+    <!-- Scenario Selector Pills -->
+    <div class="scenarios-scroll">
+      <div class="scenario-chip selected" id="chip1" onclick="selectScenario(1)">
+        <span>⚡</span> <span>Prime Surge (₹180)</span>
+      </div>
+      <div class="scenario-chip" id="chip2" onclick="selectScenario(2)">
+        <span>🛑</span> <span>Money Trap (₹35)</span>
+      </div>
+      <div class="scenario-chip" id="chip3" onclick="selectScenario(3)">
+        <span>⚠️</span> <span>Marginal (₹95)</span>
+      </div>
+      <div class="scenario-chip" id="chip4" onclick="selectScenario(4)">
+        <span>🌧️</span> <span>Rain Surge (₹210)</span>
       </div>
     </div>
-    <div class="header-actions">
-      <button class="btn-action-pill" id="btnAudioToggle" onclick="toggleAudioFx()"><span id="audioIcon">🔔</span> <span id="audioText">SFX</span></button>
-      <button class="btn-action-pill" id="btnVoiceToggle" onclick="toggleVoice()"><span id="voiceIcon">🔊</span> <span id="voiceText">Voice</span></button>
-    </div>
-  </div>
 
-  <div class="gps-banner">
-    <div class="gps-info">
-      <div class="gps-title"><span>📍</span> <span id="gpsStatusText">DEVICE GPS SENSOR</span></div>
-      <div class="gps-coords" id="gpsCoordinates">Tap 'ENABLE GPS' to read phone sensors</div>
-    </div>
-    <button class="btn-gps-toggle" id="btnGpsToggle" onclick="requestDeviceLocation()">ENABLE GPS</button>
-  </div>
+    <!-- Floating HUD Card (Cyberpunk) -->
+    <div class="hud-card" id="hudCard">
+      <div class="hud-top">
+        <span class="hud-badge badge-accept" id="hudBadge">PROFITABLE RIDE</span>
+        <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;" id="hudEta">ETA: 6 mins</span>
+      </div>
 
-  <div class="hud-card" id="hudCard">
-    <div class="hud-top">
-      <span class="hud-badge badge-accept" id="hudBadge">PROFITABLE RIDE</span>
-      <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;" id="hudEta">ETA: 6 mins</span>
-    </div>
-    <div class="hud-stats-grid">
-      <div class="stat-box"><div class="val" id="hudNetRate">₹42.8</div><div class="lbl">Net ₹/km</div></div>
-      <div class="stat-box"><div class="val" id="hudHourly">₹480</div><div class="lbl">Hourly Pot.</div></div>
-      <div class="stat-box"><div class="val" id="hudScore">92/100</div><div class="lbl">Profit Score</div></div>
-    </div>
-    <div class="hud-direction-row">
-      <div><span class="compass-needle" id="compassIcon">🧭</span> <span id="hudDirectionText">NE (45°) • TOWARDS HOME</span></div>
-      <span style="font-size: 10px; color: var(--cyan-blue);" id="hudSurgeTag">1.4x SURGE</span>
-    </div>
-    <div class="hud-progress-wrap"><div class="hud-progress-bar" id="hudProgressBar"></div></div>
-    <div class="hud-action-text" id="hudActionText">Auto-Accepting in 5s...</div>
-  </div>
+      <div class="hud-stats-grid">
+        <div class="stat-box">
+          <div class="val" id="hudNetRate">₹42.8</div>
+          <div class="lbl">Net ₹/km</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="hudHourly">₹480</div>
+          <div class="lbl">Hourly Pot.</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="hudScore">92/100</div>
+          <div class="lbl">Profit Score</div>
+        </div>
+      </div>
 
-  <div class="radar-container">
-    <div style="display:flex; justify-content:space-between; width:100%; font-size:11px; font-weight:800;">
-      <span style="color:var(--cyan-blue);">🛰️ TACTICAL RADAR</span>
-      <span style="color:var(--text-muted);" id="radarRangeText">Range: 10 km</span>
-    </div>
-    <canvas id="radarCanvas" class="radar-canvas" width="320" height="160"></canvas>
-    <div class="radar-legend">
-      <div class="legend-item"><span class="dot-green"></span> <span>Driver GPS</span></div>
-      <div class="legend-item"><span class="dot-yellow"></span> <span>Pickup</span></div>
-      <div class="legend-item"><span class="dot-blue"></span> <span>Destination</span></div>
-    </div>
-  </div>
+      <div class="hud-direction-row">
+        <div>
+          <span class="compass-needle" id="compassIcon">🧭</span>
+          <span id="hudDirectionText">NE (45°) • TOWARDS HOME</span>
+        </div>
+        <span style="font-size: 10px; color: var(--electric-blue); font-weight: 800;" id="hudSurgeTag">1.4x SURGE</span>
+      </div>
 
-  <div class="phone-screen">
-    <div class="rapido-header">
-      <span>🟡 RAPIDO CAPTAIN</span>
-      <span style="font-size: 10px; color: var(--neon-green);">ACCESSIBILITY ACTIVE</span>
+      <div class="hud-progress-wrap">
+        <div class="hud-progress-bar" id="hudProgressBar"></div>
+      </div>
+
+      <div class="hud-action-text" id="hudActionText">
+        Auto-Accepting in 5s...
+      </div>
     </div>
+
+    <!-- Tactical Radar Card -->
+    <div class="radar-card">
+      <div style="display:flex; justify-content:space-between; width:100%; font-size:11px; font-weight:800;">
+        <span style="color:var(--electric-blue);">🛰️ TACTICAL RADAR MAPPING</span>
+        <span style="color:var(--text-muted);">Range: 10 km</span>
+      </div>
+      <canvas id="radarCanvas" class="radar-canvas" width="320" height="150"></canvas>
+    </div>
+
+    <!-- Simulated Phone Rapido Ride Screen -->
     <div class="ride-card">
       <div class="ride-fare-row">
-        <div><span class="ride-fare" id="displayFare">₹180</span><span style="font-size: 11px; color: var(--text-muted);"> (Online)</span></div>
+        <div>
+          <span class="ride-fare" id="displayFare">₹180</span>
+          <span style="font-size: 11px; color: var(--text-muted);"> (Online Pay)</span>
+        </div>
         <span class="ride-tag" id="displayCategory">PRIME RIDE</span>
       </div>
-      <div class="ride-detail"><span>📍</span> <span id="displayPickup">Pickup: 0.8 km (Koramangala 5th Block)</span></div>
-      <div class="ride-detail"><span>🏁</span> <span id="displayDrop">Drop: 3.4 km (Indiranagar 100ft Road)</span></div>
-      <div class="ride-detail"><span>⏱️</span> <span id="displayTime">Est. Duration: 14 mins</span></div>
+
+      <div class="ride-detail">
+        <span>📍</span> <span id="displayPickup">Pickup: 0.8 km (Koramangala 5th Block)</span>
+      </div>
+      <div class="ride-detail">
+        <span>🏁</span> <span id="displayDrop">Drop: 3.4 km (Indiranagar 100ft Road)</span>
+      </div>
+      <div class="ride-detail">
+        <span>⏱️</span> <span id="displayTime">Est. Duration: 14 mins</span>
+      </div>
+
       <div class="btn-row">
         <button class="btn-action btn-reject" id="btnReject" onclick="manualReject()">REJECT</button>
         <button class="btn-action btn-accept" id="btnAccept" onclick="manualAccept()">ACCEPT ORDER</button>
       </div>
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="panel-title"><span>🧪 Test Presets</span><span style="font-size: 10px; color: var(--neon-green);">1-Tap Run</span></div>
-    <div class="presets-grid">
-      <button class="btn-preset" onclick="loadPreset(1)"><strong>Preset 1: Prime Surge</strong><span>₹180 • 0.8 km pickup</span><span class="badge badge-green">HOME ➔ ACCEPT</span></button>
-      <button class="btn-preset" onclick="loadPreset(2)"><strong>Preset 2: Money Trap</strong><span>₹35 • 3.2 km pickup</span><span class="badge badge-red">AWAY ➔ REJECT</span></button>
-      <button class="btn-preset" onclick="loadPreset(3)"><strong>Preset 3: Marginal Trip</strong><span>₹95 • 2.1 km pickup</span><span class="badge badge-yellow">MARGINAL ➔ MANUAL</span></button>
-      <button class="btn-preset" onclick="loadPreset(4)"><strong>Preset 4: Rain Surge</strong><span>₹210 • 1.0 km pickup</span><span class="badge badge-green">RAIN ➔ ACCEPT</span></button>
-    </div>
-  </div>
-
-  <div class="panel">
-    <div class="panel-title"><span>🛠️ Custom Ride Simulator</span></div>
-    <div class="custom-inputs">
-      <div class="input-box"><label>Fare (₹)</label><input type="number" id="customFare" value="150" min="20"></div>
-      <div class="input-box"><label>Pickup (km)</label><input type="number" id="customPickup" value="1.2" step="0.1"></div>
-      <div class="input-box"><label>Drop (km)</label><input type="number" id="customDrop" value="4.8" step="0.1"></div>
-      <div class="input-box"><label>Direction</label><select id="customHeading"><option value="45">North-East (Towards Home)</option><option value="180">South (Away)</option><option value="90">East (Away)</option><option value="270">West (Away)</option></select></div>
-      <button class="btn-dispatch" onclick="dispatchCustomRide()">⚡ SIMULATE CUSTOM RIDE</button>
-    </div>
-  </div>
-
-  <div class="panel">
-    <div class="panel-title"><span>⚙️ Driver Strategy Thresholds</span></div>
-    <div class="settings-group">
-      <div class="slider-wrap"><div class="setting-item"><span>Minimum Fare</span><strong id="valMinFare" style="color: var(--neon-green);\">₹40</strong></div><input type="range" id="sliderMinFare" min="20" max="150" value="40" oninput="updateSettings()"></div>
-      <div class="slider-wrap"><div class="setting-item"><span>Max Pickup</span><strong id="valMaxPickup" style="color: var(--neon-green);\">3.0 km</strong></div><input type="range" id="sliderMaxPickup" min="1" max="10" step="0.5" value="3.0" oninput="updateSettings()"></div>
-      <div class="setting-item"><span>Auto-Accept Matching Rides</span><label class="toggle-switch"><input type="checkbox" id="chkAutoAccept" checked onchange="updateSettings()"><span class="toggle-slider"></span></label></div>
-      <div class="setting-item"><span>Auto-Reject Money Traps</span><label class="toggle-switch"><input type="checkbox" id="chkAutoReject" checked onchange="updateSettings()"><span class="toggle-slider"></span></label></div>
-      <div class="setting-item"><span>Prioritize Toward Home</span><label class="toggle-switch"><input type="checkbox" id="chkTowardsHome" checked onchange="updateSettings()"><span class="toggle-slider"></span></label></div>
-    </div>
   </div>
 </div>
+
+<!-- Floating Toast -->
 <div class="toast" id="toastMsg"></div>
 
 <script>
-  let config = { minFare: 40, maxPickupKm: 3.0, autoAccept: true, autoReject: true, prioritizeHome: true, voice: true, audioFx: true, homeHeading: 45 };
-  let currentOffer = null, countdownTimer = null, audioCtx = null, radarAngle = 0, deviceLocation = null;
+  let config = { minFare: 40, maxPickupKm: 3.0, autoAccept: true, autoReject: true, prioritizeHome: true, voice: true, audioFx: true };
+  let currentOffer = null, countdownTimer = null, audioCtx = null, radarAngle = 0, isDemoOpen = false;
 
   function initAudioContext() {
     if (!audioCtx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) audioCtx = new AC(); }
@@ -871,43 +997,32 @@
     document.getElementById('voiceText').innerText = config.voice ? 'Voice' : 'Muted';
     document.getElementById('voiceIcon').innerText = config.voice ? '🔊' : '🔇';
     showToast(config.voice ? 'Voice Announcements ON' : 'Voice Announcements Muted');
-    if (config.voice) speak('Voice assistant ready.');
+    if (config.voice) speak('Voice assistant active.');
   }
 
   function toggleAudioFx() {
     config.audioFx = !config.audioFx;
-    document.getElementById('audioText').innerText = config.audioFx ? 'SFX' : 'Muted';
-    document.getElementById('audioIcon').innerText = config.audioFx ? '🔔' : '🔕';
+    document.getElementById('tileAudioStatus').innerText = config.audioFx ? 'Active' : 'Muted';
     showToast(config.audioFx ? 'Sound FX Enabled' : 'Sound FX Muted');
     if (config.audioFx) playAcceptSound();
   }
 
   function requestDeviceLocation() {
     initAudioContext();
-    if (!('geolocation' in navigator)) { showToast('GPS not supported on this browser'); return; }
-    document.getElementById('gpsStatusText').innerText = 'ACQUIRING LIVE GPS...';
+    if (!('geolocation' in navigator)) { showToast('GPS not supported'); return; }
+    document.getElementById('tileGpsStatus').innerText = 'Syncing...';
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        deviceLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: Math.round(pos.coords.accuracy) };
-        document.getElementById('gpsStatusText').innerText = 'LIVE GPS LOCKED (ACTIVE)';
-        document.getElementById('gpsStatusText').style.color = 'var(--neon-green)';
-        document.getElementById('gpsCoordinates').innerText = `Lat: ${deviceLocation.lat.toFixed(4)}, Lng: ${deviceLocation.lng.toFixed(4)} (±${deviceLocation.acc}m)`;
-        document.getElementById('btnGpsToggle').innerText = 'SYNCED ✅';
-        document.getElementById('btnGpsToggle').style.background = 'var(--neon-green)';
-        showToast('📍 Live Device GPS Locked!');
+        document.getElementById('tileGpsStatus').innerText = `Active (±${Math.round(pos.coords.accuracy)}m)`;
+        document.getElementById('tileGpsStatus').style.color = 'var(--mint-green)';
+        showToast('📍 Live GPS Synced!');
         playTone(900, 'sine', 0.2, 0);
-        navigator.geolocation.watchPosition((p) => {
-          deviceLocation.lat = p.coords.latitude;
-          deviceLocation.lng = p.coords.longitude;
-          document.getElementById('gpsCoordinates').innerText = `Lat: ${p.coords.latitude.toFixed(4)}, Lng: ${p.coords.longitude.toFixed(4)} (±${Math.round(p.coords.accuracy)}m)`;
-        });
       },
       (err) => {
-        document.getElementById('gpsStatusText').innerText = 'GPS PERMISSION DENIED';
-        document.getElementById('gpsStatusText').style.color = 'var(--crimson-red)';
-        showToast('Location permission denied.');
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        document.getElementById('tileGpsStatus').innerText = 'Denied';
+        document.getElementById('tileGpsStatus').style.color = 'var(--crimson-red)';
+        showToast('GPS access denied.');
+      }
     );
   }
 
@@ -915,49 +1030,46 @@
     const t = document.getElementById('toastMsg');
     t.innerText = msg;
     t.style.display = 'block';
-    setTimeout(() => { t.style.display = 'none'; }, 2500);
+    setTimeout(() => { t.style.display = 'none'; }, 2200);
   }
 
   function updateSettings() {
     config.minFare = parseFloat(document.getElementById('sliderMinFare').value);
     config.maxPickupKm = parseFloat(document.getElementById('sliderMaxPickup').value);
-    config.autoAccept = document.getElementById('chkAutoAccept').checked;
-    config.autoReject = document.getElementById('chkAutoReject').checked;
-    config.prioritizeHome = document.getElementById('chkTowardsHome').checked;
     document.getElementById('valMinFare').innerText = '₹' + config.minFare;
     document.getElementById('valMaxPickup').innerText = config.maxPickupKm.toFixed(1) + ' km';
-    if (currentOffer) evaluateAndDisplay(currentOffer);
+    if (isDemoOpen && currentOffer) evaluateAndDisplay(currentOffer);
+  }
+
+  // Demo Mode Navigation
+  function openDemoMode() {
+    initAudioContext();
+    isDemoOpen = true;
+    document.getElementById('demoView').classList.add('active');
+    selectScenario(1);
+    requestAnimationFrame(renderRadar);
+  }
+
+  function closeDemoMode() {
+    isDemoOpen = false;
+    clearInterval(countdownTimer);
+    document.getElementById('demoView').classList.remove('active');
   }
 
   const PRESETS = {
     1: { fare: 180, pickupKm: 0.8, dropKm: 3.4, pickupLoc: 'Koramangala 5th Block', dropLoc: 'Indiranagar 100ft Road', headingAngle: 45, compass: 'NE', isTowardsHome: true, timeMins: 14, surge: '1.4x Surge', category: 'PRIME RIDE' },
     2: { fare: 35, pickupKm: 3.2, dropKm: 4.6, pickupLoc: 'BTM 2nd Stage', dropLoc: 'Bannerghatta National Park', headingAngle: 210, compass: 'SW', isTowardsHome: false, timeMins: 26, surge: 'Standard', category: 'RAPIDO BIKE' },
     3: { fare: 95, pickupKm: 2.1, dropKm: 6.4, pickupLoc: 'HSR Layout Sector 1', dropLoc: 'Bellandur EcoSpace', headingAngle: 85, compass: 'E', isTowardsHome: false, timeMins: 22, surge: '1.1x Surge', category: 'RAPIDO BIKE' },
-    4: { fare: 210, pickupKm: 1.0, dropKm: 5.0, pickupLoc: 'MG Road Metro', dropLoc: 'Domlur Ring Road', headingAngle: 50, compass: 'NE', isTowardsHome: true, timeMins: 18, surge: '1.8x Rain Surge', category: 'RAIN SURGE PRIME' }
+    4: { fare: 210, pickupKm: 1.0, dropKm: 5.0, pickupLoc: 'MG Road Metro', dropLoc: 'Domlur Ring Road', headingAngle: 50, compass: 'NE', isTowardsHome: true, timeMins: 18, surge: '1.8x Rain Surge', category: 'RAIN SURGE' }
   };
 
-  function loadPreset(id) { initAudioContext(); dispatchOffer(PRESETS[id]); }
-
-  function dispatchCustomRide() {
+  function selectScenario(id) {
     initAudioContext();
-    const fare = parseFloat(document.getElementById('customFare').value) || 120;
-    const pickupKm = parseFloat(document.getElementById('customPickup').value) || 1.2;
-    const dropKm = parseFloat(document.getElementById('customDrop').value) || 4.5;
-    const heading = parseInt(document.getElementById('customHeading').value) || 45;
-    let compass = 'NE', isTowards = true;
-    if (heading === 180) { compass = 'S'; isTowards = false; }
-    else if (heading === 90) { compass = 'E'; isTowards = false; }
-    else if (heading === 270) { compass = 'W'; isTowards = false; }
-
-    dispatchOffer({
-      fare: fare, pickupKm: pickupKm, dropKm: dropKm,
-      pickupLoc: 'Driver GPS Vicinity', dropLoc: 'Custom Drop Location',
-      headingAngle: heading, compass: compass, isTowardsHome: isTowards,
-      timeMins: Math.round(dropKm * 3.4 + 4), surge: fare > (dropKm * 25) ? 'Surge Active' : 'Normal', category: 'CUSTOM RIDE'
-    });
-  }
-
-  function dispatchOffer(offer) {
+    for (let i = 1; i <= 4; i++) {
+      const chip = document.getElementById('chip' + i);
+      if (chip) chip.classList.toggle('selected', i === id);
+    }
+    const offer = PRESETS[id];
     currentOffer = offer;
     document.getElementById('displayFare').innerText = '₹' + offer.fare;
     document.getElementById('displayPickup').innerText = `Pickup: ${offer.pickupKm} km (${offer.pickupLoc})`;
@@ -990,7 +1102,7 @@
     document.getElementById('compassIcon').style.transform = `rotate(${offer.headingAngle}deg)`;
 
     if (offer.isTowardsHome) {
-      document.getElementById('hudDirectionText').innerHTML = `${offer.compass} (${offer.headingAngle}°) • <span style="color:var(--neon-green)">TOWARDS HOME</span>`;
+      document.getElementById('hudDirectionText').innerHTML = `${offer.compass} (${offer.headingAngle}°) • <span style="color:var(--mint-green)">TOWARDS HOME</span>`;
     } else {
       document.getElementById('hudDirectionText').innerHTML = `${offer.compass} (${offer.headingAngle}°) • <span style="color:var(--crimson-red)">AWAY FROM HOME</span>`;
     }
@@ -998,7 +1110,7 @@
     const pBar = document.getElementById('hudProgressBar');
     if (decision === 'ACCEPT') {
       badge.className = 'hud-badge badge-accept'; badge.innerText = 'PROFITABLE RIDE';
-      hud.style.borderColor = 'var(--neon-green)'; pBar.style.background = 'var(--neon-green)';
+      hud.style.borderColor = 'var(--mint-green)'; pBar.style.background = 'var(--mint-green)';
       playAcceptSound();
       speak(`Prime ride detected. Rate ₹${Math.round(netRatePerKm)} per kilometer. Auto-accepting.`);
       startCountdown(5, true);
@@ -1010,7 +1122,7 @@
       startCountdown(5, false);
     } else {
       badge.className = 'hud-badge badge-manual'; badge.innerText = 'MANUAL DECISION';
-      hud.style.borderColor = 'var(--amber-yellow)'; pBar.style.background = 'var(--amber-yellow)';
+      hud.style.borderColor = 'var(--amber-accent)'; pBar.style.background = 'var(--amber-accent)';
       pBar.style.width = '100%'; document.getElementById('hudActionText').innerText = 'Driver Decision Required';
       playTone(440, 'sine', 0.2, 0);
       speak(`Marginal ride. Fare ₹${offer.fare}. Tap to decide.`);
@@ -1065,6 +1177,7 @@
   }
 
   function renderRadar() {
+    if (!isDemoOpen) return;
     const c = document.getElementById('radarCanvas'); if (!c) return;
     const ctx = c.getContext('2d'), w = c.width, h = c.height, cx = w/2, cy = h/2, maxR = Math.min(w,h)/2 - 8;
     ctx.clearRect(0, 0, w, h);
@@ -1075,22 +1188,22 @@
     radarAngle += 0.035;
     const sx = cx + Math.cos(radarAngle)*maxR, sy = cy + Math.sin(radarAngle)*maxR;
     const g = ctx.createLinearGradient(cx, cy, sx, sy);
-    g.addColorStop(0, 'rgba(0, 229, 255, 0.4)'); g.addColorStop(1, 'rgba(0, 229, 255, 0)');
+    g.addColorStop(0, 'rgba(59, 130, 246, 0.4)'); g.addColorStop(1, 'rgba(59, 130, 246, 0)');
     ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, maxR, radarAngle - 0.4, radarAngle); ctx.fillStyle = g; ctx.fill();
 
-    ctx.fillStyle = '#00E676'; ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#10B981'; ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI*2); ctx.fill();
 
     if (currentOffer) {
       const pR = Math.min(maxR * 0.9, (currentOffer.pickupKm / 8) * maxR + 15);
       const aRad = (currentOffer.headingAngle - 90) * (Math.PI / 180);
       const px = cx + Math.cos(aRad - 0.3) * pR, py = cy + Math.sin(aRad - 0.3) * pR;
-      ctx.fillStyle = '#F9A825'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#F59E0B'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2); ctx.fill();
 
       const dR = Math.min(maxR * 0.95, (currentOffer.dropKm / 10) * maxR + 25);
       const dx = cx + Math.cos(aRad) * dR, dy = cy + Math.sin(aRad) * dR;
-      ctx.fillStyle = '#00E5FF'; ctx.beginPath(); ctx.arc(dx, dy, 5, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#3B82F6'; ctx.beginPath(); ctx.arc(dx, dy, 5, 0, Math.PI*2); ctx.fill();
 
-      ctx.strokeStyle = 'rgba(0, 229, 255, 0.4)'; ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)'; ctx.setLineDash([3, 3]);
       ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, py);
       ctx.lineTo(dx, dy);
       ctx.stroke();
@@ -1098,32 +1211,6 @@
     }
     requestAnimationFrame(renderRadar);
   }
-
-  function runSplashBoot() {
-    const splash = document.getElementById('splashScreen');
-    const fill = document.getElementById('splashFill');
-    const l1 = document.getElementById('line1');
-    const l2 = document.getElementById('line2');
-    const l3 = document.getElementById('line3');
-    const l4 = document.getElementById('line4');
-
-    setTimeout(() => { if (l1) l1.classList.add('visible'); if (fill) fill.style.width = '25%'; playTone(520, 'sine', 0.08); }, 200);
-    setTimeout(() => { if (l2) l2.classList.add('visible'); if (fill) fill.style.width = '55%'; playTone(780, 'sine', 0.08); }, 500);
-    setTimeout(() => { if (l3) l3.classList.add('visible'); if (fill) fill.style.width = '85%'; playTone(1040, 'sine', 0.08); }, 800);
-    setTimeout(() => { if (l4) l4.classList.add('visible'); if (fill) fill.style.width = '100%'; playAcceptSound(); }, 1100);
-    setTimeout(() => {
-      if (splash) {
-        splash.classList.add('hidden');
-        splash.style.display = 'none';
-      }
-    }, 1400);
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    runSplashBoot();
-    loadPreset(1);
-    requestAnimationFrame(renderRadar);
-  });
 </script>
 </body>
 </html>

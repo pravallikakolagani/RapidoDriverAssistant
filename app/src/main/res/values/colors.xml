@@ -27,4 +27,13 @@
     <color name="md_theme_onSurface">#E2E8F0</color>
     <color name="md_theme_onSurface_variant">#94A3B8</color>
     <color name="md_theme_outline">#334155</color>
+
+    <!-- Samsung Health / Google Health Modern Palette -->
+    <color name="samsung_bg">#0B0F19</color>
+    <color name="samsung_card">#151D2E</color>
+    <color name="samsung_surface">#1E293B</color>
+    <color name="samsung_border">#2B3547</color>
+    <color name="samsung_mint">#10B981</color>
+    <color name="samsung_blue">#3B82F6</color>
+    <color name="samsung_amber">#F59E0B</color>
 </resources>
