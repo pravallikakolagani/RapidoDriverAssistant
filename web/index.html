@@ -822,23 +822,23 @@
       background: var(--bg-card);
       backdrop-filter: blur(28px);
       border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 18px;
+      border-radius: 20px;
+      padding: 12px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--glass-highlight);
+      gap: 8px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--glass-highlight);
     }
 
     .radar-canvas {
       width: 100%;
       max-width: 340px;
-      height: 155px;
-      border-radius: 16px;
+      height: 95px;
+      border-radius: 14px;
       background: #04060C;
       border: 1px solid rgba(0, 245, 160, 0.2);
-      box-shadow: inset 0 0 25px rgba(0, 245, 160, 0.15);
+      box-shadow: inset 0 0 20px rgba(0, 245, 160, 0.15);
     }
 
     /* Simulated Phone Ride Offer Card */
@@ -1197,7 +1197,7 @@
         <span style="color:var(--emerald);">🛰️ TACTICAL RADAR SCANNER</span>
         <span style="color:var(--text-sub);">Range: 10 km • Real-time</span>
       </div>
-      <canvas id="radarCanvas" class="radar-canvas" width="340" height="155"></canvas>
+      <canvas id="radarCanvas" class="radar-canvas" width="340" height="95"></canvas>
     </div>
 
     <!-- Simulated Phone Rapido Ride Screen -->
@@ -1461,7 +1461,7 @@
     triggerAutoReject();
   }
 
-  // Tactical Radar Canvas Rendering Loop
+  // Tactical Radar Canvas Rendering Loop (Optimized compact 95px viewport)
   function renderRadar() {
     if (!isDemoOpen) return;
     const canvas = document.getElementById('radarCanvas');
@@ -1475,7 +1475,7 @@
     // Radar Circles
     ctx.strokeStyle = 'rgba(0, 245, 160, 0.18)';
     ctx.lineWidth = 1;
-    for (let r = 25; r < 75; r += 24) {
+    for (let r = 14; r < 46; r += 14) {
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.stroke();
@@ -1483,7 +1483,7 @@
 
     // Grid crosshairs
     ctx.beginPath();
-    ctx.moveTo(cx, 10); ctx.lineTo(cx, h - 10);
+    ctx.moveTo(cx, 6); ctx.lineTo(cx, h - 6);
     ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy);
     ctx.strokeStyle = 'rgba(0, 245, 160, 0.12)';
     ctx.stroke();
@@ -1493,13 +1493,13 @@
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(radarAngle);
-    const grad = ctx.createLinearGradient(0, 0, 80, 0);
+    const grad = ctx.createLinearGradient(0, 0, 46, 0);
     grad.addColorStop(0, 'rgba(0, 245, 160, 0.45)');
     grad.addColorStop(1, 'rgba(0, 245, 160, 0)');
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.arc(0, 0, 75, 0, 0.45);
+    ctx.arc(0, 0, 44, 0, 0.45);
     ctx.closePath();
     ctx.fill();
     ctx.restore();
@@ -1507,42 +1507,42 @@
     // Home Base Indicator (Indiranagar)
     ctx.fillStyle = '#38BDF8';
     ctx.shadowColor = '#38BDF8';
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 8;
     ctx.beginPath();
-    ctx.arc(cx + 32, cy - 35, 4, 0, Math.PI * 2);
+    ctx.arc(cx + 26, cy - 20, 3.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#38BDF8';
-    ctx.font = '9px sans-serif';
-    ctx.fillText('HOME BASE', cx + 40, cy - 32);
+    ctx.font = '8px sans-serif';
+    ctx.fillText('HOME BASE', cx + 33, cy - 18);
 
     // Current Offer Blip
     if (currentOffer) {
       const rad = (currentOffer.bearing - 90) * (Math.PI / 180);
-      const dist = Math.min(65, currentOffer.pickupKm * 15 + 15);
+      const dist = Math.min(38, currentOffer.pickupKm * 9 + 8);
       const bx = cx + Math.cos(rad) * dist;
       const by = cy + Math.sin(rad) * dist;
 
       ctx.fillStyle = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
       ctx.shadowColor = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
-      ctx.shadowBlur = 14;
+      ctx.shadowBlur = 12;
       ctx.beginPath();
-      ctx.arc(bx, by, 5, 0, Math.PI * 2);
+      ctx.arc(bx, by, 4, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
 
       // Lock Reticle
       ctx.strokeStyle = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(bx - 9, by - 9, 18, 18);
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(bx - 6, by - 6, 12, 12);
     }
 
     // Driver Center Blip
     ctx.fillStyle = '#FFFFFF';
     ctx.shadowColor = '#FFFFFF';
-    ctx.shadowBlur = 8;
+    ctx.shadowBlur = 6;
     ctx.beginPath();
-    ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 3, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
 
