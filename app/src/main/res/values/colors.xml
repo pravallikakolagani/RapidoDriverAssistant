@@ -3,42 +3,47 @@
     <!-- Brand Accents -->
     <color name="rapido_yellow">#FBBF24</color>
     <color name="rapido_yellow_dark">#D97706</color>
-    <color name="rapido_black">#060812</color>
+    <color name="rapido_black">#080B12</color>
     
     <!-- Cyberpunk HUD Palette -->
-    <color name="hud_bg_dark">#E6070914</color>
-    <color name="hud_surface">#D9141D33</color>
-    <color name="hud_border">#4DFFFFFF</color>
+    <color name="hud_bg_dark">#F0080B12</color>
+    <color name="hud_surface">#E6151C2C</color>
+    <color name="hud_border">#33FFFFFF</color>
     <color name="hud_neon_green">#00F5A0</color>
-    <color name="hud_neon_green_alpha">#3300F5A0</color>
-    <color name="hud_crimson_red">#FF2A55</color>
-    <color name="hud_crimson_red_alpha">#33FF2A55</color>
+    <color name="hud_neon_green_alpha">#2600F5A0</color>
+    <color name="hud_crimson_red">#FF3366</color>
+    <color name="hud_crimson_red_alpha">#26FF3366</color>
     <color name="hud_cyan">#38BDF8</color>
     <color name="hud_amber">#FBBF24</color>
     <color name="hud_text_primary">#FFFFFF</color>
     <color name="hud_text_secondary">#94A3B8</color>
-    <color name="hud_card_bg">#141D33</color>
+    <color name="hud_text_tertiary">#64748B</color>
+    <color name="hud_card_bg">#111625</color>
     
     <!-- Material Theme Base -->
     <color name="md_theme_primary">#38BDF8</color>
     <color name="md_theme_onPrimary">#000000</color>
-    <color name="md_theme_background">#060812</color>
-    <color name="md_theme_surface">#12182A</color>
-    <color name="md_theme_surface_variant">#1A223C</color>
-    <color name="md_theme_onSurface">#F8FAFC</color>
+    <color name="md_theme_background">#080B12</color>
+    <color name="md_theme_surface">#111625</color>
+    <color name="md_theme_surface_variant">#182035</color>
+    <color name="md_theme_onSurface">#FFFFFF</color>
     <color name="md_theme_onSurface_variant">#94A3B8</color>
-    <color name="md_theme_outline">#2E3A5A</color>
+    <color name="md_theme_outline">#25324E</color>
 
-    <!-- Cyber-Luxe Classy Palette -->
-    <color name="samsung_bg">#060812</color>
-    <color name="samsung_card">#12182A</color>
-    <color name="samsung_surface">#1A223C</color>
-    <color name="samsung_border">#2E3A5A</color>
+    <!-- Cyber-Luxe Classy Widget Palette -->
+    <color name="samsung_bg">#080B12</color>
+    <color name="samsung_card">#111625</color>
+    <color name="samsung_surface">#182035</color>
+    <color name="samsung_border">#25324E</color>
     <color name="samsung_mint">#00F5A0</color>
     <color name="samsung_blue">#38BDF8</color>
     <color name="samsung_amber">#FBBF24</color>
-    <color name="samsung_ruby">#FF2A55</color>
-    <color name="samsung_indigo">#6366F1</color>
+    <color name="samsung_ruby">#FF3366</color>
+    <color name="samsung_indigo">#8B5CF6</color>
     <color name="samsung_glass_stroke">#33FFFFFF</color>
     <color name="samsung_glow">#406366F1</color>
+    
+    <!-- Widget Tile Tokens -->
+    <color name="widget_tile_bg">#151C2E</color>
+    <color name="widget_tile_stroke">#2A3856</color>
 </resources>
