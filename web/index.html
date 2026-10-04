@@ -3,27 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rapido Driver Assistant - Smart Dashboard</title>
+  <title>Rapido Driver Assistant - Cyber-Luxe Cockpit</title>
   <style>
     :root {
-      --bg-main: #0B0F19;
-      --card-bg: #151D2E;
-      --card-surface: #1E293B;
-      --card-border: rgba(255, 255, 255, 0.08);
+      /* Cyber-Luxe Obsidian Matrix */
+      --bg-base: #060812;
+      --bg-card: rgba(18, 24, 42, 0.72);
+      --bg-card-hover: rgba(26, 34, 58, 0.85);
+      --bg-surface: rgba(30, 41, 69, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-glow: rgba(99, 102, 241, 0.3);
+      --glass-highlight: rgba(255, 255, 255, 0.18);
       
-      /* Samsung Health / Google Health Inspired Accents */
-      --mint-green: #10B981;
-      --mint-glow: rgba(16, 185, 129, 0.35);
-      --electric-blue: #3B82F6;
-      --blue-glow: rgba(59, 130, 246, 0.35);
-      --amber-accent: #F59E0B;
-      --amber-glow: rgba(245, 158, 11, 0.35);
-      --crimson-red: #EF4444;
-      --rapido-yellow: #FBBF24;
+      /* Jewel-Tone Accents */
+      --emerald: #00F5A0;
+      --emerald-glow: rgba(0, 245, 160, 0.45);
+      --sapphire: #38BDF8;
+      --sapphire-glow: rgba(56, 189, 248, 0.45);
+      --indigo: #6366F1;
+      --indigo-glow: rgba(99, 102, 241, 0.45);
+      --gold: #FBBF24;
+      --gold-glow: rgba(251, 191, 36, 0.45);
+      --ruby: #FF2A55;
+      --ruby-glow: rgba(255, 42, 85, 0.45);
       
-      --text-primary: #F8FAFC;
-      --text-secondary: #94A3B8;
-      --text-muted: #64748B;
+      --text-main: #FFFFFF;
+      --text-sub: #94A3B8;
+      --text-dim: #64748B;
     }
 
     * {
@@ -42,8 +48,13 @@
     }
 
     body {
-      background: var(--bg-main);
-      color: var(--text-primary);
+      background: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 10% 12%, rgba(99, 102, 241, 0.22) 0%, transparent 45%),
+        radial-gradient(circle at 90% 18%, rgba(0, 245, 160, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(56, 189, 248, 0.16) 0%, transparent 55%);
+      background-attachment: fixed;
+      color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
       overflow-y: auto !important;
@@ -51,7 +62,25 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 14px 14px 100px 14px;
+      padding: 16px 14px 100px 14px;
+    }
+
+    /* Ambient Animated Aurora Mesh Background Layer */
+    .aurora-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(0, 245, 160, 0.12) 0%, transparent 50%);
+      animation: auroraMove 16s ease-in-out infinite alternate;
+    }
+
+    @keyframes auroraMove {
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.08) translate(-10px, 15px); }
+      100% { transform: scale(1) translate(10px, -10px); }
     }
 
     .app-viewport {
@@ -59,11 +88,12 @@
       max-width: 480px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
       position: relative;
+      z-index: 1;
     }
 
-    /* Top Profile & Status Bar */
+    /* Top Profile & Header Bar */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -78,70 +108,154 @@
     }
 
     .avatar-icon {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, #F59E0B, #D97706);
-      border-radius: 14px;
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+      font-size: 24px;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4), inset 0 1px 1px rgba(255,255,255,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: avatarBreath 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes avatarBreath {
+      0% { transform: translateY(0); box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35); }
+      100% { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245, 158, 11, 0.55); }
     }
 
     .profile-details h2 {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: -0.2px;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 70%, #94A3B8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .status-chip {
       font-size: 11px;
-      color: var(--mint-green);
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
-      background: var(--mint-green);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--mint-green);
-      animation: pulse 1.8s infinite ease-in-out;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(0.9); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 1; }
-    }
-
-    .btn-icon-pill {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-primary);
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
+      color: var(--emerald);
+      font-weight: 800;
+      letter-spacing: 0.4px;
       display: flex;
       align-items: center;
       gap: 6px;
-      cursor: pointer;
+      margin-top: 2px;
     }
 
-    /* Samsung Health Style Activity Rings Card */
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--emerald);
+      animation: pulseGlow 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 8px var(--emerald); }
+      50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 16px var(--emerald), 0 0 24px var(--emerald); }
+    }
+
+    .btn-icon-pill {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 22px;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 var(--glass-highlight);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-icon-pill:active {
+      transform: scale(0.96);
+    }
+
+    /* AI Copilot Neural Capsule */
+    .ai-copilot-capsule {
+      background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), rgba(0, 245, 160, 0.15));
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: 16px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+    }
+
+    .copilot-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .copilot-orb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFF 0%, var(--indigo) 60%, transparent 100%);
+      box-shadow: 0 0 14px var(--indigo);
+      animation: orbGlow 2.5s infinite ease-in-out alternate;
+    }
+
+    @keyframes orbGlow {
+      0% { transform: scale(0.9); box-shadow: 0 0 8px var(--indigo); }
+      100% { transform: scale(1.2); box-shadow: 0 0 18px var(--sapphire), 0 0 28px var(--indigo); }
+    }
+
+    .copilot-text {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #E2E8F0;
+      text-transform: uppercase;
+    }
+
+    .copilot-badge {
+      background: rgba(0, 245, 160, 0.2);
+      color: var(--emerald);
+      border: 1px solid var(--emerald);
+      font-size: 10px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 245, 160, 0.3);
+    }
+
+    /* Glassmorphism 2.0 Health & Target Card */
     .health-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      background: var(--bg-card);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-highlight);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .health-card::before {
+      content: '';
+      position: absolute;
+      top: -50%; right: -50%; width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+      pointer-events: none;
     }
 
     .card-header-row {
@@ -152,48 +266,55 @@
 
     .card-title {
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-secondary);
+      letter-spacing: 0.9px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .card-badge {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--mint-green);
+      background: rgba(0, 245, 160, 0.18);
+      color: var(--emerald);
+      border: 1px solid rgba(0, 245, 160, 0.35);
       font-size: 11px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px var(--emerald-glow);
     }
 
     .rings-content {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 16px;
     }
 
+    /* Glowing 3-Ring SVG Target Meter */
     .rings-svg-wrap {
-      width: 140px;
-      height: 140px;
+      width: 145px;
+      height: 145px;
       position: relative;
       flex-shrink: 0;
     }
 
     .rings-svg-wrap svg {
       transform: rotate(-90deg);
+      filter: drop-shadow(0 0 8px rgba(0, 245, 160, 0.3));
     }
 
     .ring-bg {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.06);
+      stroke: rgba(255, 255, 255, 0.05);
     }
 
     .ring-val {
       fill: none;
       stroke-linecap: round;
-      transition: stroke-dashoffset 1s ease;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .rings-center-text {
@@ -205,17 +326,19 @@
     }
 
     .rings-center-text .score {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 900;
       color: #FFF;
       letter-spacing: -0.5px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.5);
     }
 
     .rings-center-text .label {
       font-size: 9px;
-      font-weight: 800;
+      font-weight: 900;
       text-transform: uppercase;
-      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      color: var(--emerald);
     }
 
     .metrics-column {
@@ -228,7 +351,17 @@
     .metric-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .metric-row:hover {
+      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.06);
     }
 
     .metric-dot {
@@ -245,33 +378,44 @@
 
     .metric-val {
       font-size: 15px;
-      font-weight: 800;
+      font-weight: 900;
       color: #FFF;
     }
 
     .metric-desc {
       font-size: 11px;
-      color: var(--text-secondary);
+      color: var(--text-sub);
       font-weight: 600;
     }
 
-    /* Icon-Driven Status Grid */
+    /* 2x2 Interactive Sensor & Hardware Grid */
     .status-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
 
     .status-tile {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 14px;
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 16px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       cursor: pointer;
-      transition: all 0.2s;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--glass-highlight);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status-tile:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     }
 
     .status-tile:active {
@@ -279,14 +423,15 @@
     }
 
     .tile-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 19px;
+      font-size: 21px;
       flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
     }
 
     .tile-texts {
@@ -297,28 +442,51 @@
 
     .tile-title {
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       color: #FFF;
     }
 
     .tile-status {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: 0.3px;
     }
 
-    /* Hero Demo Mode Card */
+    /* Holographic Hero Demo Card with Animated Shimmer */
     .hero-demo-card {
-      background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-      border: 1.5px solid rgba(59, 130, 246, 0.4);
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px var(--blue-glow);
+      background: linear-gradient(135deg, rgba(30, 41, 69, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 30px var(--sapphire-glow), inset 0 1px 0 var(--glass-highlight);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 16px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hero-demo-card::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -60%; width: 50%; height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+      transform: rotate(25deg);
+      animation: shimmerSweep 4.5s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmerSweep {
+      0% { left: -60%; }
+      35%, 100% { left: 160%; }
+    }
+
+    .hero-demo-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7), 0 0 40px var(--sapphire-glow);
     }
 
     .hero-demo-card:active {
@@ -326,48 +494,64 @@
     }
 
     .hero-demo-text h3 {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 900;
       color: #FFF;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
 
     .hero-demo-text p {
       font-size: 12px;
-      color: var(--text-secondary);
+      color: var(--sapphire);
       margin-top: 4px;
-      font-weight: 500;
+      font-weight: 600;
+      letter-spacing: 0.2px;
     }
 
     .btn-launch-demo {
-      background: linear-gradient(135deg, var(--electric-blue), #2563EB);
+      background: linear-gradient(135deg, var(--sapphire) 0%, var(--indigo) 100%);
       color: #FFF;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 13px 20px;
+      border-radius: 16px;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       flex-shrink: 0;
-      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+      letter-spacing: 0.4px;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn-launch-demo:hover {
+      transform: scale(1.05);
     }
 
     /* Driver Strategy Sliders Card */
     .settings-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 18px 20px;
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--glass-border);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--glass-highlight);
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
     .slider-item {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
     }
 
     .slider-top-row {
@@ -375,47 +559,52 @@
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .slider-label {
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--text-secondary);
+      color: var(--text-main);
     }
 
     .slider-value {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--mint-green);
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--emerald);
+      text-shadow: 0 0 10px var(--emerald-glow);
     }
 
     input[type='range'] {
       width: 100%;
       height: 6px;
       border-radius: 6px;
-      background: var(--card-surface);
-      accent-color: var(--mint-green);
+      background: var(--bg-surface);
+      accent-color: var(--emerald);
       cursor: pointer;
     }
 
-    /* DEDICATED DEMO MODE VIEW / MODAL (FULL SCREEN) */
+    /* DEDICATED FULL SCREEN DEMO MODE VIEW */
     .demo-view {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: var(--bg-main);
+      background: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 85% 25%, rgba(0, 245, 160, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(56, 189, 248, 0.18) 0%, transparent 50%);
       z-index: 1000;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 14px 14px 90px 14px;
+      padding: 16px 14px 90px 14px;
       overflow-y: auto !important;
       -webkit-overflow-scrolling: touch;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(20px);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(30px);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .demo-view.active {
@@ -429,10 +618,10 @@
       max-width: 480px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
-    /* Demo Header with Back Arrow */
+    /* Demo Header with Back Button */
     .demo-header {
       display: flex;
       align-items: center;
@@ -441,113 +630,148 @@
     }
 
     .btn-back {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
       color: #FFF;
-      padding: 8px 14px;
-      border-radius: 14px;
+      padding: 10px 16px;
+      border-radius: 16px;
       font-weight: 800;
       font-size: 13px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 var(--glass-highlight);
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+      background: var(--bg-card-hover);
     }
 
     .demo-header-title {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 900;
-      color: var(--text-primary);
+      background: linear-gradient(135deg, #FFF, var(--sapphire));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.2px;
     }
 
     /* Horizontal Scenario Selector Chips */
     .scenarios-scroll {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding-bottom: 6px;
       scrollbar-width: none;
     }
     .scenarios-scroll::-webkit-scrollbar { display: none; }
 
     .scenario-chip {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      color: var(--text-secondary);
-      padding: 10px 16px;
-      border-radius: 16px;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid var(--glass-border);
+      color: var(--text-sub);
+      padding: 11px 18px;
+      border-radius: 18px;
       font-size: 12px;
       font-weight: 800;
       white-space: nowrap;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .scenario-chip:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.25);
     }
 
     .scenario-chip.selected {
-      background: rgba(59, 130, 246, 0.15);
-      border-color: var(--electric-blue);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(56, 189, 248, 0.25));
+      border-color: var(--sapphire);
       color: #FFF;
-      box-shadow: 0 0 15px var(--blue-glow);
+      box-shadow: 0 0 20px var(--sapphire-glow), inset 0 1px 0 rgba(255,255,255,0.4);
     }
 
-    /* Floating HUD Card in Demo */
+    /* Floating Cyberpunk HUD Card */
     .hud-card {
-      background: rgba(14, 18, 26, 0.95);
-      border: 2px solid var(--mint-green);
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 20px var(--mint-glow);
-      backdrop-filter: blur(10px);
+      background: rgba(14, 20, 36, 0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 2px solid var(--emerald);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8), 0 0 30px var(--emerald-glow), inset 0 1px 0 var(--glass-highlight);
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
 
     .hud-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .hud-badge {
       font-size: 11px;
       font-weight: 900;
-      letter-spacing: 0.8px;
-      padding: 4px 10px;
-      border-radius: 6px;
+      letter-spacing: 0.9px;
+      padding: 5px 12px;
+      border-radius: 8px;
       text-transform: uppercase;
     }
 
-    .badge-accept { background: rgba(16, 185, 129, 0.2); color: var(--mint-green); border: 1px solid var(--mint-green); }
-    .badge-reject { background: rgba(239, 68, 68, 0.2); color: var(--crimson-red); border: 1px solid var(--crimson-red); }
-    .badge-manual { background: rgba(245, 158, 11, 0.2); color: var(--amber-accent); border: 1px solid var(--amber-accent); }
+    .badge-accept {
+      background: rgba(0, 245, 160, 0.2);
+      color: var(--emerald);
+      border: 1px solid var(--emerald);
+      box-shadow: 0 0 12px var(--emerald-glow);
+    }
+    .badge-reject {
+      background: rgba(255, 42, 85, 0.2);
+      color: var(--ruby);
+      border: 1px solid var(--ruby);
+      box-shadow: 0 0 12px var(--ruby-glow);
+    }
+    .badge-manual {
+      background: rgba(251, 191, 36, 0.2);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
 
     .hud-stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 12px;
-      border-radius: 14px;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 14px;
+      border-radius: 16px;
       text-align: center;
-      margin-bottom: 12px;
-      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
     .stat-box .val {
-      font-size: 17px;
+      font-size: 19px;
       font-weight: 900;
       color: #FFF;
+      text-shadow: 0 0 12px rgba(255,255,255,0.3);
     }
 
     .stat-box .lbl {
       font-size: 9px;
-      color: var(--text-muted);
+      color: var(--text-sub);
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-top: 2px;
-      font-weight: 700;
+      letter-spacing: 0.7px;
+      margin-top: 3px;
+      font-weight: 800;
     }
 
     .hud-direction-row {
@@ -555,148 +779,179 @@
       justify-content: space-between;
       align-items: center;
       font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 10px;
+      font-weight: 800;
+      margin-bottom: 12px;
       background: rgba(255,255,255,0.04);
-      padding: 8px 12px;
-      border-radius: 8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
     .compass-needle {
       display: inline-block;
-      transition: transform 0.5s ease;
-      font-size: 16px;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 18px;
     }
 
     .hud-progress-wrap {
-      background: rgba(255, 255, 255, 0.12);
-      height: 6px;
-      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      height: 7px;
+      border-radius: 7px;
       overflow: hidden;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
     }
 
     .hud-progress-bar {
       height: 100%;
-      background: var(--mint-green);
+      background: linear-gradient(90deg, var(--emerald) 0%, #34D399 100%);
       width: 100%;
+      box-shadow: 0 0 12px var(--emerald);
       transition: width 0.08s linear;
     }
 
     .hud-action-text {
-      font-size: 13px;
-      font-weight: 800;
+      font-size: 14px;
+      font-weight: 900;
       text-align: center;
+      text-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    /* Radar Canvas inside Demo */
+    /* Tactical Radar Card */
     .radar-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 14px;
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--glass-highlight);
     }
 
     .radar-canvas {
       width: 100%;
-      max-width: 320px;
-      height: 150px;
-      border-radius: 12px;
-      background: #080A10;
+      max-width: 340px;
+      height: 155px;
+      border-radius: 16px;
+      background: #04060C;
+      border: 1px solid rgba(0, 245, 160, 0.2);
+      box-shadow: inset 0 0 25px rgba(0, 245, 160, 0.15);
     }
 
     /* Simulated Phone Ride Offer Card */
     .ride-card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 16px;
-      border: 1px solid var(--card-border);
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      border-radius: 24px;
+      padding: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-highlight);
     }
 
     .ride-fare-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .ride-fare {
-      font-size: 30px;
+      font-size: 34px;
       font-weight: 900;
       color: #FFF;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 15px rgba(255,255,255,0.4);
     }
 
     .ride-tag {
-      background: var(--rapido-yellow);
+      background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
       color: #000;
       font-size: 11px;
       font-weight: 900;
-      padding: 4px 8px;
-      border-radius: 6px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px var(--gold-glow);
     }
 
     .ride-detail {
       font-size: 13px;
-      color: #CBD5E1;
-      margin: 6px 0;
+      color: #E2E8F0;
+      margin: 8px 0;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-weight: 600;
     }
 
     .btn-row {
       display: flex;
-      gap: 10px;
-      margin-top: 14px;
+      gap: 12px;
+      margin-top: 16px;
     }
 
     .btn-action {
       flex: 1;
-      padding: 14px;
-      border-radius: 12px;
+      padding: 15px;
+      border-radius: 16px;
       border: none;
-      font-weight: 800;
-      font-size: 13px;
+      font-weight: 900;
+      font-size: 14px;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .btn-accept { background: var(--rapido-yellow); color: #000; }
-    .btn-reject { background: var(--card-surface); color: #FFF; border: 1px solid var(--card-border); }
+    .btn-accept {
+      background: linear-gradient(135deg, var(--emerald) 0%, #059669 100%);
+      color: #000;
+      box-shadow: 0 6px 20px var(--emerald-glow), inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+    .btn-accept:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--emerald-glow); }
+    .btn-accept:active { transform: scale(0.97); }
+
+    .btn-reject {
+      background: rgba(255, 42, 85, 0.15);
+      color: var(--ruby);
+      border: 1.5px solid var(--ruby);
+      box-shadow: 0 4px 15px rgba(255, 42, 85, 0.2);
+    }
+    .btn-reject:hover { background: rgba(255, 42, 85, 0.25); }
+    .btn-reject:active { transform: scale(0.97); }
 
     .auto-click-ripple {
       animation: ripple 0.7s ease-out;
     }
 
     @keyframes ripple {
-      0% { box-shadow: 0 0 0 0 rgba(249, 168, 37, 0.9); }
-      70% { box-shadow: 0 0 0 18px rgba(249, 168, 37, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(249, 168, 37, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0.9); }
+      70% { box-shadow: 0 0 0 20px rgba(0, 245, 160, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0); }
     }
 
     /* Toast Notification */
     .toast {
       position: fixed;
-      bottom: 24px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1.5px solid var(--mint-green);
+      bottom: 28px;
+      background: rgba(14, 20, 36, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid var(--emerald);
       color: #FFF;
-      padding: 10px 20px;
+      padding: 12px 24px;
       border-radius: 30px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
       display: none;
       z-index: 2000;
       text-align: center;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.8);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px var(--emerald-glow);
     }
   </style>
 </head>
 <body>
+
+<div class="aurora-bg"></div>
 
 <div class="app-viewport">
 
@@ -705,7 +960,7 @@
     <div class="profile-group">
       <div class="avatar-icon">🏍️</div>
       <div class="profile-details">
-        <h2>Captain Dashboard</h2>
+        <h2>Captain Cockpit</h2>
         <div class="status-chip"><span class="pulse-dot"></span> ASSISTANT ACTIVE</div>
       </div>
     </div>
@@ -714,30 +969,54 @@
     </button>
   </div>
 
+  <!-- AI Copilot Neural Capsule -->
+  <div class="ai-copilot-capsule">
+    <div class="copilot-left">
+      <div class="copilot-orb"></div>
+      <span class="copilot-text">AI Copilot • Scanning Ride Feed</span>
+    </div>
+    <span class="copilot-badge">READY</span>
+  </div>
+
   <!-- Samsung Health Style Activity Rings Card -->
   <div class="health-card">
     <div class="card-header-row">
-      <span class="card-title">Today's Shift Targets</span>
+      <span class="card-title">🏆 Today's Shift Targets</span>
       <span class="card-badge">EFFICIENCY 92%</span>
     </div>
 
     <div class="rings-content">
       <!-- 3-Ring SVG Visualization -->
       <div class="rings-svg-wrap">
-        <svg width="140" height="140" viewBox="0 0 140 140">
-          <!-- Outer Ring: Earnings (Mint Green) -->
-          <circle class="ring-bg" cx="70" cy="70" r="58" stroke-width="9" />
-          <circle class="ring-val" cx="70" cy="70" r="58" stroke-width="9" stroke="var(--mint-green)"
-                  stroke-dasharray="364.4" stroke-dashoffset="102" />
+        <svg width="145" height="145" viewBox="0 0 145 145">
+          <defs>
+            <linearGradient id="gradEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00F5A0" />
+              <stop offset="100%" stop-color="#00D9F5" />
+            </linearGradient>
+            <linearGradient id="gradSapphire" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38BDF8" />
+              <stop offset="100%" stop-color="#6366F1" />
+            </linearGradient>
+            <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FBBF24" />
+              <stop offset="100%" stop-color="#F59E0B" />
+            </linearGradient>
+          </defs>
 
-          <!-- Middle Ring: Profit Rate (Electric Blue) -->
-          <circle class="ring-bg" cx="70" cy="70" r="45" stroke-width="9" />
-          <circle class="ring-val" cx="70" cy="70" r="45" stroke-width="9" stroke="var(--electric-blue)"
-                  stroke-dasharray="282.7" stroke-dashoffset="65" />
+          <!-- Outer Ring: Earnings (Hyper Emerald) -->
+          <circle class="ring-bg" cx="72.5" cy="72.5" r="60" stroke-width="10" />
+          <circle class="ring-val" cx="72.5" cy="72.5" r="60" stroke-width="10" stroke="url(#gradEmerald)"
+                  stroke-dasharray="377.0" stroke-dashoffset="105" />
 
-          <!-- Inner Ring: Traps Filtered (Amber) -->
-          <circle class="ring-bg" cx="70" cy="70" r="32" stroke-width="9" />
-          <circle class="ring-val" cx="70" cy="70" r="32" stroke-width="9" stroke="var(--amber-accent)"
+          <!-- Middle Ring: Profit Rate (Electric Sapphire) -->
+          <circle class="ring-bg" cx="72.5" cy="72.5" r="46" stroke-width="10" />
+          <circle class="ring-val" cx="72.5" cy="72.5" r="46" stroke-width="10" stroke="url(#gradSapphire)"
+                  stroke-dasharray="289.0" stroke-dashoffset="68" />
+
+          <!-- Inner Ring: Traps Filtered (Imperial Gold) -->
+          <circle class="ring-bg" cx="72.5" cy="72.5" r="32" stroke-width="10" />
+          <circle class="ring-val" cx="72.5" cy="72.5" r="32" stroke-width="10" stroke="url(#gradGold)"
                   stroke-dasharray="201.0" stroke-dashoffset="40" />
         </svg>
 
@@ -750,23 +1029,23 @@
       <!-- Metrics Breakdown -->
       <div class="metrics-column">
         <div class="metric-row">
-          <div class="metric-dot" style="background: var(--mint-green);"></div>
+          <div class="metric-dot" style="background: var(--emerald); box-shadow: 0 0 8px var(--emerald);"></div>
           <div class="metric-info">
-            <span class="metric-val">₹1,450 <span style="font-size: 11px; color: var(--text-muted);">/ ₹2,000</span></span>
+            <span class="metric-val">₹1,450 <span style="font-size: 11px; color: var(--text-dim);">/ ₹2,000</span></span>
             <span class="metric-desc">Earnings Target</span>
           </div>
         </div>
 
         <div class="metric-row">
-          <div class="metric-dot" style="background: var(--electric-blue);"></div>
+          <div class="metric-dot" style="background: var(--sapphire); box-shadow: 0 0 8px var(--sapphire);"></div>
           <div class="metric-info">
-            <span class="metric-val">₹38.2 <span style="font-size: 11px; color: var(--text-muted);">/ km</span></span>
+            <span class="metric-val">₹38.2 <span style="font-size: 11px; color: var(--text-dim);">/ km</span></span>
             <span class="metric-desc">Average Net Rate</span>
           </div>
         </div>
 
         <div class="metric-row">
-          <div class="metric-dot" style="background: var(--amber-accent);"></div>
+          <div class="metric-dot" style="background: var(--gold); box-shadow: 0 0 8px var(--gold);"></div>
           <div class="metric-info">
             <span class="metric-val">8 Traps Screened</span>
             <span class="metric-desc">Saved 18 km deadhead</span>
@@ -776,55 +1055,55 @@
     </div>
   </div>
 
-  <!-- Icon-Driven Status Tiles -->
+  <!-- 2x2 Interactive Sensor Tiles -->
   <div class="status-grid">
     <div class="status-tile" onclick="requestDeviceLocation()">
-      <div class="tile-icon" style="background: rgba(59, 130, 246, 0.15); color: var(--electric-blue);">📍</div>
+      <div class="tile-icon" style="background: rgba(56, 189, 248, 0.18); color: var(--sapphire);">📍</div>
       <div class="tile-texts">
         <span class="tile-title">GPS Sensor</span>
-        <span class="tile-status" id="tileGpsStatus" style="color: var(--electric-blue);">Tap to Sync</span>
+        <span class="tile-status" id="tileGpsStatus" style="color: var(--sapphire);">Tap to Sync</span>
       </div>
     </div>
 
     <div class="status-tile">
-      <div class="tile-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--mint-green);">🛡️</div>
+      <div class="tile-icon" style="background: rgba(0, 245, 160, 0.18); color: var(--emerald);">🛡️</div>
       <div class="tile-texts">
         <span class="tile-title">HUD Overlay</span>
-        <span class="tile-status" style="color: var(--mint-green);">Enabled</span>
+        <span class="tile-status" style="color: var(--emerald);">Active &amp; Ready</span>
       </div>
     </div>
 
     <div class="status-tile" onclick="toggleAudioFx()">
-      <div class="tile-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--amber-accent);">🔔</div>
+      <div class="tile-icon" style="background: rgba(251, 191, 36, 0.18); color: var(--gold);">🔔</div>
       <div class="tile-texts">
         <span class="tile-title">Sound Chimes</span>
-        <span class="tile-status" id="tileAudioStatus" style="color: var(--amber-accent);">Active</span>
+        <span class="tile-status" id="tileAudioStatus" style="color: var(--gold);">Active</span>
       </div>
     </div>
 
     <div class="status-tile">
-      <div class="tile-icon" style="background: rgba(168, 85, 247, 0.15); color: #C084FC);">♿</div>
+      <div class="tile-icon" style="background: rgba(99, 102, 241, 0.18); color: var(--indigo);">♿</div>
       <div class="tile-texts">
         <span class="tile-title">Accessibility</span>
-        <span class="tile-status" style="color: #C084FC);">Scanning Node</span>
+        <span class="tile-status" style="color: var(--indigo);">Scanning Feed</span>
       </div>
     </div>
   </div>
 
-  <!-- Dedicated Demo Mode Hero Launcher -->
+  <!-- Holographic Hero Demo Card -->
   <div class="hero-demo-card" onclick="openDemoMode()">
     <div class="hero-demo-text">
       <h3>🚀 Interactive Demo Mode</h3>
-      <p>Simulate rides, test HUD alerts &amp; voice</p>
+      <p>Simulate live rides, tactical HUD &amp; auto-accept</p>
     </div>
     <button class="btn-launch-demo">OPEN DEMO →</button>
   </div>
 
-  <!-- Driver Strategy Settings -->
+  <!-- Driver Strategy Sliders Card -->
   <div class="settings-card">
     <div class="card-header-row">
-      <span class="card-title">Driver Thresholds</span>
-      <span style="font-size: 11px; color: var(--electric-blue); font-weight: 700;">Live Auto-Tune</span>
+      <span class="card-title">⚙️ Strategy Thresholds</span>
+      <span style="font-size: 11px; color: var(--sapphire); font-weight: 800;">Real-Time Auto-Tune</span>
     </div>
 
     <div class="slider-item">
@@ -853,7 +1132,7 @@
     <!-- Demo Navigation Header -->
     <div class="demo-header">
       <button class="btn-back" onclick="closeDemoMode()">← Dashboard</button>
-      <span class="demo-header-title">🎮 Demo Simulation Flow</span>
+      <span class="demo-header-title">⚡ Interactive Ride Simulation</span>
       <div style="width: 70px;"></div>
     </div>
 
@@ -877,7 +1156,7 @@
     <div class="hud-card" id="hudCard">
       <div class="hud-top">
         <span class="hud-badge badge-accept" id="hudBadge">PROFITABLE RIDE</span>
-        <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;" id="hudEta">ETA: 6 mins</span>
+        <span style="font-size: 11px; color: var(--text-sub); font-weight: 800;" id="hudEta">ETA: 6 mins</span>
       </div>
 
       <div class="hud-stats-grid">
@@ -891,7 +1170,7 @@
         </div>
         <div class="stat-box">
           <div class="val" id="hudScore">92/100</div>
-          <div class="lbl">Profit Score</div>
+          <div class="lbl">AI Score</div>
         </div>
       </div>
 
@@ -900,7 +1179,7 @@
           <span class="compass-needle" id="compassIcon">🧭</span>
           <span id="hudDirectionText">NE (45°) • TOWARDS HOME</span>
         </div>
-        <span style="font-size: 10px; color: var(--electric-blue); font-weight: 800;" id="hudSurgeTag">1.4x SURGE</span>
+        <span style="font-size: 11px; color: var(--sapphire); font-weight: 900;" id="hudSurgeTag">1.4x SURGE</span>
       </div>
 
       <div class="hud-progress-wrap">
@@ -914,11 +1193,11 @@
 
     <!-- Tactical Radar Card -->
     <div class="radar-card">
-      <div style="display:flex; justify-content:space-between; width:100%; font-size:11px; font-weight:800;">
-        <span style="color:var(--electric-blue);">🛰️ TACTICAL RADAR MAPPING</span>
-        <span style="color:var(--text-muted);">Range: 10 km</span>
+      <div style="display:flex; justify-content:space-between; width:100%; font-size:11px; font-weight:900;">
+        <span style="color:var(--emerald);">🛰️ TACTICAL RADAR SCANNER</span>
+        <span style="color:var(--text-sub);">Range: 10 km • Real-time</span>
       </div>
-      <canvas id="radarCanvas" class="radar-canvas" width="320" height="150"></canvas>
+      <canvas id="radarCanvas" class="radar-canvas" width="340" height="155"></canvas>
     </div>
 
     <!-- Simulated Phone Rapido Ride Screen -->
@@ -926,9 +1205,9 @@
       <div class="ride-fare-row">
         <div>
           <span class="ride-fare" id="displayFare">₹180</span>
-          <span style="font-size: 11px; color: var(--text-muted);"> (Online Pay)</span>
+          <span style="font-size: 12px; color: var(--text-sub);"> (Online Pay)</span>
         </div>
-        <span class="ride-tag" id="displayCategory">PRIME RIDE</span>
+        <span class="ride-tag" id="displayCategory">PRIME OFFER</span>
       </div>
 
       <div class="ride-detail">
@@ -942,8 +1221,8 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn-action btn-reject" id="btnReject" onclick="manualReject()">REJECT</button>
-        <button class="btn-action btn-accept" id="btnAccept" onclick="manualAccept()">ACCEPT ORDER</button>
+        <button class="btn-action btn-reject" id="btnReject" onclick="manualReject()">✕ REJECT</button>
+        <button class="btn-action btn-accept" id="btnAccept" onclick="manualAccept()">⚡ ACCEPT ORDER</button>
       </div>
     </div>
 
@@ -971,7 +1250,7 @@
       const gain = audioCtx.createGain();
       osc.type = type;
       osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
-      gain.gain.setValueAtTime(0.12, audioCtx.currentTime + delay);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime + delay);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
@@ -996,7 +1275,7 @@
     config.voice = !config.voice;
     document.getElementById('voiceText').innerText = config.voice ? 'Voice' : 'Muted';
     document.getElementById('voiceIcon').innerText = config.voice ? '🔊' : '🔇';
-    showToast(config.voice ? 'Voice Announcements ON' : 'Voice Announcements Muted');
+    showToast(config.voice ? 'Voice Announcements Active' : 'Voice Announcements Muted');
     if (config.voice) speak('Voice assistant active.');
   }
 
@@ -1014,13 +1293,13 @@
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         document.getElementById('tileGpsStatus').innerText = `Active (±${Math.round(pos.coords.accuracy)}m)`;
-        document.getElementById('tileGpsStatus').style.color = 'var(--mint-green)';
+        document.getElementById('tileGpsStatus').style.color = 'var(--emerald)';
         showToast('📍 Live GPS Synced!');
         playTone(900, 'sine', 0.2, 0);
       },
       (err) => {
         document.getElementById('tileGpsStatus').innerText = 'Denied';
-        document.getElementById('tileGpsStatus').style.color = 'var(--crimson-red)';
+        document.getElementById('tileGpsStatus').style.color = 'var(--ruby)';
         showToast('GPS access denied.');
       }
     );
@@ -1052,165 +1331,227 @@
 
   function closeDemoMode() {
     isDemoOpen = false;
-    clearInterval(countdownTimer);
+    if (countdownTimer) clearInterval(countdownTimer);
     document.getElementById('demoView').classList.remove('active');
   }
 
-  const PRESETS = {
-    1: { fare: 180, pickupKm: 0.8, dropKm: 3.4, pickupLoc: 'Koramangala 5th Block', dropLoc: 'Indiranagar 100ft Road', headingAngle: 45, compass: 'NE', isTowardsHome: true, timeMins: 14, surge: '1.4x Surge', category: 'PRIME RIDE' },
-    2: { fare: 35, pickupKm: 3.2, dropKm: 4.6, pickupLoc: 'BTM 2nd Stage', dropLoc: 'Bannerghatta National Park', headingAngle: 210, compass: 'SW', isTowardsHome: false, timeMins: 26, surge: 'Standard', category: 'RAPIDO BIKE' },
-    3: { fare: 95, pickupKm: 2.1, dropKm: 6.4, pickupLoc: 'HSR Layout Sector 1', dropLoc: 'Bellandur EcoSpace', headingAngle: 85, compass: 'E', isTowardsHome: false, timeMins: 22, surge: '1.1x Surge', category: 'RAPIDO BIKE' },
-    4: { fare: 210, pickupKm: 1.0, dropKm: 5.0, pickupLoc: 'MG Road Metro', dropLoc: 'Domlur Ring Road', headingAngle: 50, compass: 'NE', isTowardsHome: true, timeMins: 18, surge: '1.8x Rain Surge', category: 'RAIN SURGE' }
+  const scenarios = {
+    1: { id: 1, fare: 180, pickupKm: 0.8, pickupLoc: "Koramangala 5th Block", dropLoc: "Indiranagar 100ft Road", dropDistanceKm: 3.4, isTowardsHome: true, bearing: 42, compass: "NE", surge: "1.4x SURGE", category: "PRIME OFFER", timeEst: "14 mins" },
+    2: { id: 2, fare: 35, pickupKm: 4.8, pickupLoc: "BTM 2nd Stage", dropLoc: "Whitefield Outer Ring", dropDistanceKm: 18.0, isTowardsHome: false, bearing: 110, compass: "ESE", surge: "NO SURGE", category: "DEADHEAD TRAP", timeEst: "48 mins" },
+    3: { id: 3, fare: 95, pickupKm: 2.2, pickupLoc: "Sony Signal", dropLoc: "Domlur Flyover", dropDistanceKm: 4.1, isTowardsHome: true, bearing: 20, compass: "NNE", surge: "1.1x SURGE", category: "MARGINAL RIDE", timeEst: "18 mins" },
+    4: { id: 4, fare: 210, pickupKm: 0.6, pickupLoc: "Forum Mall Koramangala", dropLoc: "MG Road Metro", dropDistanceKm: 5.2, isTowardsHome: true, bearing: 345, compass: "NNW", surge: "2.1x RAIN SURGE", category: "RAIN SURGE", timeEst: "22 mins" }
   };
 
   function selectScenario(id) {
     initAudioContext();
     for (let i = 1; i <= 4; i++) {
-      const chip = document.getElementById('chip' + i);
-      if (chip) chip.classList.toggle('selected', i === id);
+      document.getElementById('chip' + i).classList.remove('selected');
     }
-    const offer = PRESETS[id];
-    currentOffer = offer;
-    document.getElementById('displayFare').innerText = '₹' + offer.fare;
-    document.getElementById('displayPickup').innerText = `Pickup: ${offer.pickupKm} km (${offer.pickupLoc})`;
-    document.getElementById('displayDrop').innerText = `Drop: ${offer.dropKm} km (${offer.dropLoc})`;
-    document.getElementById('displayTime').innerText = `Est. Duration: ${offer.timeMins} mins`;
-    document.getElementById('displayCategory').innerText = offer.category;
-    document.getElementById('hudSurgeTag').innerText = offer.surge;
-    evaluateAndDisplay(offer);
+    document.getElementById('chip' + id).classList.add('selected');
+    currentOffer = scenarios[id];
+    evaluateAndDisplay(currentOffer);
   }
 
   function evaluateAndDisplay(offer) {
-    clearInterval(countdownTimer);
-    const totalDistance = offer.pickupKm + offer.dropKm;
-    const netRatePerKm = offer.fare / (totalDistance || 1);
-    const hourlyPotential = (offer.fare / offer.timeMins) * 60;
-    let score = Math.min(100, Math.round((netRatePerKm / 35) * 60 + (offer.isTowardsHome ? 25 : 0)));
-    if (offer.fare < config.minFare || offer.pickupKm > config.maxPickupKm) score = Math.max(15, score - 45);
+    if (countdownTimer) clearInterval(countdownTimer);
 
-    let decision = 'ACCEPT', reason = 'High Rate & Toward Home';
-    if (offer.fare < config.minFare) { decision = 'REJECT_LOW_FARE'; reason = `Fare below ₹${config.minFare}`; }
-    else if (offer.pickupKm > config.maxPickupKm) { decision = 'REJECT_FAR_PICKUP'; reason = `Pickup exceeds ${config.maxPickupKm}km`; }
-    else if (config.prioritizeHome && !offer.isTowardsHome && netRatePerKm < 20) { decision = 'REJECT_AWAY_HOME'; reason = 'Heading away from home'; }
-    else if (netRatePerKm >= 20 && netRatePerKm < 28) { decision = 'MANUAL'; reason = 'Marginal trip'; }
+    // Update Simulated Ride Card
+    document.getElementById('displayFare').innerText = '₹' + offer.fare;
+    document.getElementById('displayCategory').innerText = offer.category;
+    document.getElementById('displayPickup').innerText = `Pickup: ${offer.pickupKm} km (${offer.pickupLoc})`;
+    document.getElementById('displayDrop').innerText = `Drop: ${offer.dropDistanceKm} km (${offer.dropLoc})`;
+    document.getElementById('displayTime').innerText = `Est. Duration: ${offer.timeEst}`;
 
-    const hud = document.getElementById('hudCard');
-    const badge = document.getElementById('hudBadge');
-    document.getElementById('hudNetRate').innerText = '₹' + netRatePerKm.toFixed(1);
-    document.getElementById('hudHourly').innerText = '₹' + Math.round(hourlyPotential);
+    // Calculate Metrics
+    const totalKm = offer.pickupKm + offer.dropDistanceKm;
+    const netRate = (offer.fare / totalKm).toFixed(1);
+    const hourlyRate = Math.round((offer.fare / parseInt(offer.timeEst)) * 60);
+    const meetsCriteria = (offer.fare >= config.minFare) && (offer.pickupKm <= config.maxPickupKm) && (!config.prioritizeHome || offer.isTowardsHome);
+
+    document.getElementById('hudNetRate').innerText = '₹' + netRate;
+    document.getElementById('hudHourly').innerText = '₹' + hourlyRate;
+    document.getElementById('hudSurgeTag').innerText = offer.surge;
+    document.getElementById('hudDirectionText').innerText = `${offer.compass} (${offer.bearing}°) • ${offer.isTowardsHome ? 'TOWARDS HOME' : 'AWAY FROM HOME'}`;
+    document.getElementById('compassIcon').style.transform = `rotate(${offer.bearing}deg)`;
+
+    const hudCard = document.getElementById('hudCard');
+    const hudBadge = document.getElementById('hudBadge');
+    const hudBar = document.getElementById('hudProgressBar');
+    const hudAction = document.getElementById('hudActionText');
+
+    let score = Math.min(99, Math.max(15, Math.round((netRate / 45) * 80 + (offer.isTowardsHome ? 18 : 0))));
     document.getElementById('hudScore').innerText = score + '/100';
-    document.getElementById('compassIcon').style.transform = `rotate(${offer.headingAngle}deg)`;
 
-    if (offer.isTowardsHome) {
-      document.getElementById('hudDirectionText').innerHTML = `${offer.compass} (${offer.headingAngle}°) • <span style="color:var(--mint-green)">TOWARDS HOME</span>`;
-    } else {
-      document.getElementById('hudDirectionText').innerHTML = `${offer.compass} (${offer.headingAngle}°) • <span style="color:var(--crimson-red)">AWAY FROM HOME</span>`;
-    }
-
-    const pBar = document.getElementById('hudProgressBar');
-    if (decision === 'ACCEPT') {
-      badge.className = 'hud-badge badge-accept'; badge.innerText = 'PROFITABLE RIDE';
-      hud.style.borderColor = 'var(--mint-green)'; pBar.style.background = 'var(--mint-green)';
+    if (meetsCriteria) {
+      hudCard.style.borderColor = 'var(--emerald)';
+      hudCard.style.boxShadow = '0 16px 45px rgba(0, 0, 0, 0.8), 0 0 30px var(--emerald-glow), inset 0 1px 0 var(--glass-highlight)';
+      hudBadge.className = 'hud-badge badge-accept';
+      hudBadge.innerText = 'HIGH PROFIT • ACCEPT';
+      hudBar.style.background = 'linear-gradient(90deg, var(--emerald) 0%, #34D399 100%)';
+      hudBar.style.boxShadow = '0 0 12px var(--emerald)';
+      hudAction.style.color = 'var(--emerald)';
       playAcceptSound();
-      speak(`Prime ride detected. Rate ₹${Math.round(netRatePerKm)} per kilometer. Auto-accepting.`);
-      startCountdown(5, true);
-    } else if (decision.startsWith('REJECT')) {
-      badge.className = 'hud-badge badge-reject'; badge.innerText = 'POOR RIDE (TRAP)';
-      hud.style.borderColor = 'var(--crimson-red)'; pBar.style.background = 'var(--crimson-red)';
-      playRejectSound();
-      speak(`Poor ride. ${reason}. Auto-rejecting.`);
-      startCountdown(5, false);
+      speak(`New high profit order to ${offer.dropLoc}. ${offer.fare} rupees. Auto-accepting.`);
+      startCountdown(true);
     } else {
-      badge.className = 'hud-badge badge-manual'; badge.innerText = 'MANUAL DECISION';
-      hud.style.borderColor = 'var(--amber-accent)'; pBar.style.background = 'var(--amber-accent)';
-      pBar.style.width = '100%'; document.getElementById('hudActionText').innerText = 'Driver Decision Required';
-      playTone(440, 'sine', 0.2, 0);
-      speak(`Marginal ride. Fare ₹${offer.fare}. Tap to decide.`);
+      hudCard.style.borderColor = 'var(--ruby)';
+      hudCard.style.boxShadow = '0 16px 45px rgba(0, 0, 0, 0.8), 0 0 30px var(--ruby-glow), inset 0 1px 0 var(--glass-highlight)';
+      hudBadge.className = 'hud-badge badge-reject';
+      hudBadge.innerText = 'MONEY TRAP • SKIP';
+      hudBar.style.background = 'linear-gradient(90deg, var(--ruby) 0%, #F43F5E 100%)';
+      hudBar.style.boxShadow = '0 0 12px var(--ruby)';
+      hudAction.style.color = 'var(--ruby)';
+      playRejectSound();
+      speak(`Warning. Low profit order to ${offer.dropLoc}. Skipping.`);
+      startCountdown(false);
     }
   }
 
-  function startCountdown(seconds, isAccept) {
-    const totalMs = seconds * 1000, startTime = Date.now();
-    let lastSec = seconds;
+  function startCountdown(isAccept) {
+    let timeLeft = 5.0;
+    const hudBar = document.getElementById('hudProgressBar');
+    const hudAction = document.getElementById('hudActionText');
+
     countdownTimer = setInterval(() => {
-      const remaining = Math.max(0, totalMs - (Date.now() - startTime));
-      const sec = Math.ceil(remaining / 1000);
-      if (sec !== lastSec && sec > 0) { lastSec = sec; playTickSound(); }
-      document.getElementById('hudProgressBar').style.width = ((remaining / totalMs) * 100) + '%';
-      document.getElementById('hudActionText').innerText = isAccept ? `Auto-Accepting in ${sec}s...` : `Auto-Rejecting in ${sec}s...`;
-      if (remaining <= 0) {
+      timeLeft -= 0.1;
+      const pct = (timeLeft / 5.0) * 100;
+      hudBar.style.width = pct + '%';
+      hudAction.innerText = `${isAccept ? 'Auto-Accepting' : 'Auto-Skipping'} in ${Math.ceil(timeLeft)}s...`;
+
+      if (timeLeft <= 0) {
         clearInterval(countdownTimer);
-        if (isAccept && config.autoAccept) triggerAcceptClick();
-        else if (!isAccept && config.autoReject) triggerRejectClick();
+        hudBar.style.width = '0%';
+        if (isAccept) {
+          triggerAutoAccept();
+        } else {
+          triggerAutoReject();
+        }
       }
-    }, 40);
+    }, 100);
   }
 
-  function triggerAcceptClick() {
+  function triggerAutoAccept() {
     const btn = document.getElementById('btnAccept');
     btn.classList.add('auto-click-ripple');
-    document.getElementById('hudActionText').innerText = '✅ AUTO-ACCEPTED!';
-    playTone(1050, 'sine', 0.25, 0);
-    showToast('Accessibility Service Auto-Clicked ACCEPT!');
-    setTimeout(() => { btn.classList.remove('auto-click-ripple'); }, 700);
+    document.getElementById('hudActionText').innerText = '🎉 ORDER ACCEPTED! DISPATCHED';
+    document.getElementById('hudActionText').style.color = 'var(--emerald)';
+    showToast('⚡ Auto-Accepted Ride Order!');
+    playAcceptSound();
+    speak('Ride accepted. Starting navigation.');
+    setTimeout(() => { btn.classList.remove('auto-click-ripple'); }, 800);
   }
 
-  function triggerRejectClick() {
+  function triggerAutoReject() {
     const btn = document.getElementById('btnReject');
     btn.classList.add('auto-click-ripple');
-    document.getElementById('hudActionText').innerText = '🛑 AUTO-REJECTED!';
-    playTone(200, 'square', 0.25, 0);
-    showToast('Accessibility Service Auto-Declined Offer');
-    setTimeout(() => { btn.classList.remove('auto-click-ripple'); }, 700);
+    document.getElementById('hudActionText').innerText = '❌ TRAP SKIPPED! STANDBY';
+    document.getElementById('hudActionText').style.color = 'var(--ruby)';
+    showToast('🛑 Screened & Skipped Unprofitable Ride');
+    playRejectSound();
+    setTimeout(() => { btn.classList.remove('auto-click-ripple'); }, 800);
   }
 
   function manualAccept() {
-    initAudioContext(); clearInterval(countdownTimer);
-    document.getElementById('hudActionText').innerText = '✅ MANUALLY ACCEPTED';
-    playTone(880, 'sine', 0.2, 0); showToast('Ride accepted manually!');
+    if (countdownTimer) clearInterval(countdownTimer);
+    triggerAutoAccept();
   }
 
   function manualReject() {
-    initAudioContext(); clearInterval(countdownTimer);
-    document.getElementById('hudActionText').innerText = '❌ MANUALLY REJECTED';
-    playTone(220, 'sine', 0.2, 0); showToast('Ride rejected manually!');
+    if (countdownTimer) clearInterval(countdownTimer);
+    triggerAutoReject();
   }
 
+  // Tactical Radar Canvas Rendering Loop
   function renderRadar() {
     if (!isDemoOpen) return;
-    const c = document.getElementById('radarCanvas'); if (!c) return;
-    const ctx = c.getContext('2d'), w = c.width, h = c.height, cx = w/2, cy = h/2, maxR = Math.min(w,h)/2 - 8;
+    const canvas = document.getElementById('radarCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    const cx = w / 2, cy = h / 2;
+
     ctx.clearRect(0, 0, w, h);
-    ctx.strokeStyle = '#1E293B'; ctx.lineWidth = 1;
-    [0.33, 0.66, 1].forEach(f => { ctx.beginPath(); ctx.arc(cx, cy, maxR*f, 0, Math.PI*2); ctx.stroke(); });
-    ctx.beginPath(); ctx.moveTo(cx, cy - maxR); ctx.lineTo(cx, cy + maxR); ctx.moveTo(cx - maxR, cy); ctx.lineTo(cx + maxR, cy); ctx.stroke();
 
-    radarAngle += 0.035;
-    const sx = cx + Math.cos(radarAngle)*maxR, sy = cy + Math.sin(radarAngle)*maxR;
-    const g = ctx.createLinearGradient(cx, cy, sx, sy);
-    g.addColorStop(0, 'rgba(59, 130, 246, 0.4)'); g.addColorStop(1, 'rgba(59, 130, 246, 0)');
-    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, maxR, radarAngle - 0.4, radarAngle); ctx.fillStyle = g; ctx.fill();
-
-    ctx.fillStyle = '#10B981'; ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI*2); ctx.fill();
-
-    if (currentOffer) {
-      const pR = Math.min(maxR * 0.9, (currentOffer.pickupKm / 8) * maxR + 15);
-      const aRad = (currentOffer.headingAngle - 90) * (Math.PI / 180);
-      const px = cx + Math.cos(aRad - 0.3) * pR, py = cy + Math.sin(aRad - 0.3) * pR;
-      ctx.fillStyle = '#F59E0B'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2); ctx.fill();
-
-      const dR = Math.min(maxR * 0.95, (currentOffer.dropKm / 10) * maxR + 25);
-      const dx = cx + Math.cos(aRad) * dR, dy = cy + Math.sin(aRad) * dR;
-      ctx.fillStyle = '#3B82F6'; ctx.beginPath(); ctx.arc(dx, dy, 5, 0, Math.PI*2); ctx.fill();
-
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)'; ctx.setLineDash([3, 3]);
-      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, py);
-      ctx.lineTo(dx, dy);
+    // Radar Circles
+    ctx.strokeStyle = 'rgba(0, 245, 160, 0.18)';
+    ctx.lineWidth = 1;
+    for (let r = 25; r < 75; r += 24) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.setLineDash([]);
     }
-    requestAnimationFrame(renderRadar);
+
+    // Grid crosshairs
+    ctx.beginPath();
+    ctx.moveTo(cx, 10); ctx.lineTo(cx, h - 10);
+    ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy);
+    ctx.strokeStyle = 'rgba(0, 245, 160, 0.12)';
+    ctx.stroke();
+
+    // Sweeping Radar Line
+    radarAngle = (radarAngle + 0.04) % (Math.PI * 2);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(radarAngle);
+    const grad = ctx.createLinearGradient(0, 0, 80, 0);
+    grad.addColorStop(0, 'rgba(0, 245, 160, 0.45)');
+    grad.addColorStop(1, 'rgba(0, 245, 160, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, 75, 0, 0.45);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // Home Base Indicator (Indiranagar)
+    ctx.fillStyle = '#38BDF8';
+    ctx.shadowColor = '#38BDF8';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(cx + 32, cy - 35, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#38BDF8';
+    ctx.font = '9px sans-serif';
+    ctx.fillText('HOME BASE', cx + 40, cy - 32);
+
+    // Current Offer Blip
+    if (currentOffer) {
+      const rad = (currentOffer.bearing - 90) * (Math.PI / 180);
+      const dist = Math.min(65, currentOffer.pickupKm * 15 + 15);
+      const bx = cx + Math.cos(rad) * dist;
+      const by = cy + Math.sin(rad) * dist;
+
+      ctx.fillStyle = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
+      ctx.shadowColor = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
+      ctx.shadowBlur = 14;
+      ctx.beginPath();
+      ctx.arc(bx, by, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Lock Reticle
+      ctx.strokeStyle = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(bx - 9, by - 9, 18, 18);
+    }
+
+    // Driver Center Blip
+    ctx.fillStyle = '#FFFFFF';
+    ctx.shadowColor = '#FFFFFF';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    if (isDemoOpen) requestAnimationFrame(renderRadar);
   }
+
+  // Pre-load audio context on first click
+  window.addEventListener('click', () => { initAudioContext(); }, { once: true });
 </script>
+
 </body>
 </html>
