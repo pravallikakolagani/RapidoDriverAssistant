@@ -59,7 +59,7 @@ class RapidoAccessibilityService : AccessibilityService() {
             addAction(ACTION_SIMULATE_OFFER)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(manualActionReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            registerReceiver(manualActionReceiver, filter, Context.RECEIVER_EXPORTED)
         } else {
             registerReceiver(manualActionReceiver, filter)
         }
