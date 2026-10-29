@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Rapido Driver Assistant - Cyber-Luxe Cockpit</title>
+  <style>
+    :root {
+      /* Cyber-Luxe Obsidian Matrix */
+      --bg-base: #060812;
+      --bg-card: rgba(18, 24, 42, 0.72);
+      --bg-card-hover: rgba(26, 34, 58, 0.85);
+      --bg-surface: rgba(30, 41, 69, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-glow: rgba(99, 102, 241, 0.3);
+      --glass-highlight: rgba(255, 255, 255, 0.18);
+      
+      /* Jewel-Tone Accents */
+      --emerald: #00F5A0;
+      --emerald-glow: rgba(0, 245, 160, 0.45);
+      --sapphire: #38BDF8;
+      --sapphire-glow: rgba(56, 189, 248, 0.45);
+      --indigo: #6366F1;
+      --indigo-glow: rgba(99, 102, 241, 0.45);
+      --gold: #FBBF24;
+      --gold-glow: rgba(251, 191, 36, 0.45);
+      --ruby: #FF2A55;
+      --ruby-glow: rgba(255, 42, 85, 0.45);
+      
+      --text-main: #FFFFFF;
+      --text-sub: #94A3B8;
+      --text-dim: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 10% 12%, rgba(99, 102, 241, 0.22) 0%, transparent 45%),
+        radial-gradient(circle at 90% 18%, rgba(0, 245, 160, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(56, 189, 248, 0.16) 0%, transparent 55%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 14px 100px 14px;
+    }
+
+    /* Ambient Animated Aurora Mesh Background Layer */
+    .aurora-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(0, 245, 160, 0.12) 0%, transparent 50%);
+      animation: auroraMove 16s ease-in-out infinite alternate;
+    }
+
+    @keyframes auroraMove {
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.08) translate(-10px, 15px); }
+      100% { transform: scale(1) translate(10px, -10px); }
+    }
+
+    .app-viewport {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Top Profile & Header Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 2px;
+    }
+
+    .profile-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar-icon {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4), inset 0 1px 1px rgba(255,255,255,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: avatarBreath 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes avatarBreath {
+      0% { transform: translateY(0); box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35); }
+      100% { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245, 158, 11, 0.55); }
+    }
+
+    .profile-details h2 {
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 70%, #94A3B8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-chip {
+      font-size: 11px;
+      color: var(--emerald);
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--emerald);
+      animation: pulseGlow 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 8px var(--emerald); }
+      50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 16px var(--emerald), 0 0 24px var(--emerald); }
+    }
+
+    .btn-icon-pill {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 22px;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 var(--glass-highlight);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-icon-pill:active {
+      transform: scale(0.96);
+    }
+
+    /* AI Copilot Neural Capsule */
+    .ai-copilot-capsule {
+      background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), rgba(0, 245, 160, 0.15));
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: 16px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+    }
+
+    .copilot-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .copilot-orb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFF 0%, var(--indigo) 60%, transparent 100%);
+      box-shadow: 0 0 14px var(--indigo);
+      animation: orbGlow 2.5s infinite ease-in-out alternate;
+    }
+
+    @keyframes orbGlow {
+      0% { transform: scale(0.9); box-shadow: 0 0 8px var(--indigo); }
+      100% { transform: scale(1.2); box-shadow: 0 0 18px var(--sapphire), 0 0 28px var(--indigo); }
+    }
+
+    .copilot-text {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #E2E8F0;
+      text-transform: uppercase;
+    }
+
+    .copilot-badge {
+      background: rgba(0, 245, 160, 0.2);
+      color: var(--emerald);
+      border: 1px solid var(--emerald);
+      font-size: 10px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 245, 160, 0.3);
+    }
+
+    /* Glassmorphism 2.0 Health & Target Card */
+    .health-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-highlight);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .health-card::before {
+      content: '';
+      position: absolute;
+      top: -50%; right: -50%; width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-badge {
+      background: rgba(0, 245, 160, 0.18);
+      color: var(--emerald);
+      border: 1px solid rgba(0, 245, 160, 0.35);
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px var(--emerald-glow);
+    }
+
+    .rings-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    /* Glowing 3-Ring SVG Target Meter */
+    .rings-svg-wrap {
+      width: 145px;
+      height: 145px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .rings-svg-wrap svg {
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 0 8px rgba(0, 245, 160, 0.3));
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.05);
+    }
+
+    .ring-val {
+      fill: none;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .rings-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .rings-center-text .score {
+      font-size: 28px;
+      font-weight: 900;
+      color: #FFF;
+      letter-spacing: -0.5px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.5);
+    }
+
+    .rings-center-text .label {
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--emerald);
+    }
+
+    .metrics-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-grow: 1;
+    }
+
+    .metric-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .metric-row:hover {
+      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .metric-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .metric-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-val {
+      font-size: 15px;
+      font-weight: 900;
+      color: #FFF;
+    }
+
+    .metric-desc {
+      font-size: 11px;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    /* 2x2 Interactive Sensor & Hardware Grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .status-tile {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--glass-highlight);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status-tile:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .status-tile:active {
+      transform: scale(0.97);
+    }
+
+    .tile-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+      flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .tile-texts {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .tile-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #FFF;
+    }
+
+    .tile-status {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    /* Holographic Hero Demo Card with Animated Shimmer */
+    .hero-demo-card {
+      background: linear-gradient(135deg, rgba(30, 41, 69, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 30px var(--sapphire-glow), inset 0 1px 0 var(--glass-highlight);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hero-demo-card::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -60%; width: 50%; height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+      transform: rotate(25deg);
+      animation: shimmerSweep 4.5s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmerSweep {
+      0% { left: -60%; }
+      35%, 100% { left: 160%; }
+    }
+
+    .hero-demo-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7), 0 0 40px var(--sapphire-glow);
+    }
+
+    .hero-demo-card:active {
+      transform: scale(0.98);
+    }
+
+    .hero-demo-text h3 {
+      font-size: 18px;
+      font-weight: 900;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .hero-demo-text p {
+      font-size: 12px;
+      color: var(--sapphire);
+      margin-top: 4px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .btn-launch-demo {
+      background: linear-gradient(135deg, var(--sapphire) 0%, var(--indigo) 100%);
+      color: #FFF;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 13px 20px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 900;
+      flex-shrink: 0;
+      letter-spacing: 0.4px;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn-launch-demo:hover {
+      transform: scale(1.05);
+    }
+
+    /* Driver Strategy Sliders Card */
+    .settings-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--glass-border);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--glass-highlight);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .slider-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .slider-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .slider-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+    }
+
+    .slider-value {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--emerald);
+      text-shadow: 0 0 10px var(--emerald-glow);
+    }
+
+    input[type='range'] {
+      width: 100%;
+      height: 6px;
+      border-radius: 6px;
+      background: var(--bg-surface);
+      accent-color: var(--emerald);
+      cursor: pointer;
+    }
+
+    /* Automation Engine Matrix */
+    .matrix-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--glass-highlight);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .toggle-widget {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .toggle-widget:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .toggle-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toggle-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-sub {
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    .ios-switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 22px;
+    }
+
+    .ios-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .ios-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 22px;
+      transition: .3s;
+    }
+
+    .ios-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    input:checked + .ios-slider {
+      background-color: var(--emerald);
+      border-color: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald-glow);
+    }
+
+    input:checked + .ios-slider:before {
+      transform: translateX(16px);
+      background-color: #080B12;
+    }
+
+    /* DEDICATED FULL SCREEN DEMO MODE VIEW */
+    .demo-view {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 85% 25%, rgba(0, 245, 160, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(56, 189, 248, 0.18) 0%, transparent 50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 14px 90px 14px;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(30px);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .demo-view.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .demo-container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Demo Header with Back Button */
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+
+    .btn-back {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      color: #FFF;
+      padding: 10px 16px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 var(--glass-highlight);
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .demo-header-title {
+      font-size: 16px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #FFF, var(--sapphire));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.2px;
+    }
+
+    /* Horizontal Scenario Selector Chips */
+    .scenarios-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+    }
+    .scenarios-scroll::-webkit-scrollbar { display: none; }
+
+    .scenario-chip {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid var(--glass-border);
+      color: var(--text-sub);
+      padding: 11px 18px;
+      border-radius: 18px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .scenario-chip:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .scenario-chip.selected {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(56, 189, 248, 0.25));
+      border-color: var(--sapphire);
+      color: #FFF;
+      box-shadow: 0 0 20px var(--sapphire-glow), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    /* Floating Cyberpunk HUD Card */
+    .hud-card {
+      background: rgba(14, 20, 36, 0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 2px solid var(--emerald);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8), 0 0 30px var(--emerald-glow), inset 0 1px 0 var(--glass-highlight);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .hud-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .hud-badge {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      text-transform: uppercase;
+    }
+
+    .badge-accept {
+      background: rgba(0, 245, 160, 0.2);
+      color: var(--emerald);
+      border: 1px solid var(--emerald);
+      box-shadow: 0 0 12px var(--emerald-glow);
+    }
+    .badge-reject {
+      background: rgba(255, 42, 85, 0.2);
+      color: var(--ruby);
+      border: 1px solid var(--ruby);
+      box-shadow: 0 0 12px var(--ruby-glow);
+    }
+    .badge-manual {
+      background: rgba(251, 191, 36, 0.2);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    .hud-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 14px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat-box .val {
+      font-size: 19px;
+      font-weight: 900;
+      color: #FFF;
+      text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    }
+
+    .stat-box .lbl {
+      font-size: 9px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-top: 3px;
+      font-weight: 800;
+    }
+
+    .hud-direction-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: rgba(255,255,255,0.04);
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .compass-needle {
+      display: inline-block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 18px;
+    }
+
+    .hud-progress-wrap {
+      background: rgba(255, 255, 255, 0.1);
+      height: 7px;
+      border-radius: 7px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .hud-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--emerald) 0%, #34D399 100%);
+      width: 100%;
+      box-shadow: 0 0 12px var(--emerald);
+      transition: width 0.08s linear;
+    }
+
+    .hud-action-text {
+      font-size: 14px;
+      font-weight: 900;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Tactical Radar Card */
+    .radar-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--glass-highlight);
+    }
+
+    .radar-canvas {
+      width: 100%;
+      max-width: 340px;
+      height: 155px;
+      border-radius: 16px;
+      background: #04060C;
+      border: 1px solid rgba(0, 245, 160, 0.2);
+      box-shadow: inset 0 0 25px rgba(0, 245, 160, 0.15);
+    }
+
+    /* Simulated Phone Ride Offer Card */
+    .ride-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      border-radius: 24px;
+      padding: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-highlight);
+    }
+
+    .ride-fare-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .ride-fare {
+      font-size: 34px;
+      font-weight: 900;
+      color: #FFF;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 15px rgba(255,255,255,0.4);
+    }
+
+    .ride-tag {
+      background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+      color: #000;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 5px 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    .ride-detail {
+      font-size: 13px;
+      color: #E2E8F0;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 15px;
+      border-radius: 16px;
+      border: none;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-accept {
+      background: linear-gradient(135deg, var(--emerald) 0%, #059669 100%);
+      color: #000;
+      box-shadow: 0 6px 20px var(--emerald-glow), inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+    .btn-accept:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--emerald-glow); }
+    .btn-accept:active { transform: scale(0.97); }
+
+    .btn-reject {
+      background: rgba(255, 42, 85, 0.15);
+      color: var(--ruby);
+      border: 1.5px solid var(--ruby);
+      box-shadow: 0 4px 15px rgba(255, 42, 85, 0.2);
+    }
+    .btn-reject:hover { background: rgba(255, 42, 85, 0.25); }
+    .btn-reject:active { transform: scale(0.97); }
+
+    .auto-click-ripple {
+      animation: ripple 0.7s ease-out;
+    }
+
+    @keyframes ripple {
+      0% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0.9); }
+      70% { box-shadow: 0 0 0 20px rgba(0, 245, 160, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0); }
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      background: rgba(14, 20, 36, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid var(--emerald);
+      color: #FFF;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 800;
+      display: none;
+      z-index: 2000;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px var(--emerald-glow);
+    }
+  </style>
+</head>
+<body>
+
+<div class="aurora-bg"></div>
+
+<div class="app-viewport">
+
+  <!-- Top Profile Bar -->
+  <div class="top-bar">
+    <div class="profile-group">
+      <div class="avatar-icon">🏍️</div>
+      <div class="profile-details">
+        <h2>Captain Cockpit</h2>
+        <div class="status-chip"><span class="pulse-dot"></span> ASSISTANT ACTIVE</div>
+      </div>
+    </div>
+    <button class="btn-icon-pill" id="btnVoiceToggle" onclick="toggleVoice()">
+      <span id="voiceIcon">🔊</span> <span id="voiceText">Voice</span>
+    </button>
+  </div>
+
+  <!-- AI Copilot Neural Capsule -->
+  <div class="ai-copilot-capsule">
+    <div class="copilot-left">
+      <div class="copilot-orb"></div>
+      <span class="copilot-text">AI Copilot • Scanning Ride Feed</span>
+    </div>
+    <span class="copilot-badge">READY</span>
+  </div>
+
+  <!-- Samsung Health Style Activity Rings Card -->
+  <div class="health-card">
+    <div class="card-header-row">
+      <span class="card-title">🏆 Today's Shift Targets</span>
+      <span class="card-badge">EFFICIENCY 92%</span>
+    </div>
+
+    <div class="rings-content">
+      <!-- 3-Ring SVG Visualization -->
+      <div class="rings-svg-wrap">
+        <svg width="145" height="145" viewBox="0 0 145 145">
+          <defs>
+            <linearGradient id="gradEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00F5A0" />
+              <stop offset="100%" stop-color="#00D9F5" />
+            </linearGradient>
+            <linearGradient id="gradSapphire" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38BDF8" />
+              <stop offset="100%" stop-color="#6366F1" />
+            </linearGradient>
+            <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FBBF24" />
+              <stop offset="100%" stop-color="#F59E0B" />
+            </linearGradient>
+          </defs>
+
+          <!-- Outer Ring: Earnings (Hyper Emerald) -->
+          <circle class="ring-bg" cx="72.5" cy="72.5" r="60" stroke-width="10" />
+          <circle class="ring-val" cx="72.5" cy="72.5" r="60" stroke-width="10" stroke="url(#gradEmerald)"
+                  stroke-dasharray="377.0" stroke-dashoffset="105" />
+
+          <!-- Middle Ring: Profit Rate (Electric Sapphire) -->
+          <circle class="ring-bg" cx="72.5" cy="72.5" r="46" stroke-width="10" />
+          <circle class="ring-val" cx="72.5" cy="72.5" r="46" stroke-width="10" stroke="url(#gradSapphire)"
+                  stroke-dasharray="289.0" stroke-dashoffset="68" />
+
+          <!-- Inner Ring: Traps Filtered (Imperial Gold) -->
+          <circle class="ring-bg" cx="72.5" cy="72.5" r="32" stroke-width="10" />
+          <circle class="ring-val" cx="72.5" cy="72.5" r="32" stroke-width="10" stroke="url(#gradGold)"
+                  stroke-dasharray="201.0" stroke-dashoffset="40" />
+        </svg>
+
+        <div class="rings-center-text">
+          <div class="score">92</div>
+          <div class="label">SCORE</div>
+        </div>
+      </div>
+
+      <!-- Metrics Breakdown -->
+      <div class="metrics-column">
+        <div class="metric-row">
+          <div class="metric-dot" style="background: var(--emerald); box-shadow: 0 0 8px var(--emerald);"></div>
+          <div class="metric-info">
+            <span class="metric-val">₹1,450 <span style="font-size: 11px; color: var(--text-dim);">/ ₹2,000</span></span>
+            <span class="metric-desc">Earnings Target</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-dot" style="background: var(--sapphire); box-shadow: 0 0 8px var(--sapphire);"></div>
+          <div class="metric-info">
+            <span class="metric-val">₹38.2 <span style="font-size: 11px; color: var(--text-dim);">/ km</span></span>
+            <span class="metric-desc">Average Net Rate</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-dot" style="background: var(--gold); box-shadow: 0 0 8px var(--gold);"></div>
+          <div class="metric-info">
+            <span class="metric-val">8 Traps Screened</span>
+            <span class="metric-desc">Saved 18 km deadhead</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2x2 Interactive Sensor Tiles -->
+  <div class="status-grid">
+    <div class="status-tile" onclick="requestDeviceLocation()">
+      <div class="tile-icon" style="background: rgba(56, 189, 248, 0.18); color: var(--sapphire);">📍</div>
+      <div class="tile-texts">
+        <span class="tile-title">GPS Sensor</span>
+        <span class="tile-status" id="tileGpsStatus" style="color: var(--sapphire);">Tap to Sync</span>
+      </div>
+    </div>
+
+    <div class="status-tile">
+      <div class="tile-icon" style="background: rgba(0, 245, 160, 0.18); color: var(--emerald);">🛡️</div>
+      <div class="tile-texts">
+        <span class="tile-title">HUD Overlay</span>
+        <span class="tile-status" style="color: var(--emerald);">Active &amp; Ready</span>
+      </div>
+    </div>
+
+    <div class="status-tile" onclick="toggleAudioFx()">
+      <div class="tile-icon" style="background: rgba(251, 191, 36, 0.18); color: var(--gold);">🔔</div>
+      <div class="tile-texts">
+        <span class="tile-title">Sound Chimes</span>
+        <span class="tile-status" id="tileAudioStatus" style="color: var(--gold);">Active</span>
+      </div>
+    </div>
+
+    <div class="status-tile">
+      <div class="tile-icon" style="background: rgba(99, 102, 241, 0.18); color: var(--indigo);">♿</div>
+      <div class="tile-texts">
+        <span class="tile-title">Accessibility</span>
+        <span class="tile-status" style="color: var(--indigo);">Scanning Feed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Holographic Hero Demo Card -->
+  <div class="hero-demo-card" onclick="openDemoMode()">
+    <div class="hero-demo-text">
+      <h3>🚀 Interactive Demo Mode</h3>
+      <p>Simulate live rides, tactical HUD &amp; auto-accept</p>
+    </div>
+    <button class="btn-launch-demo">OPEN DEMO →</button>
+  </div>
+
+  <!-- Driver Strategy Sliders Card -->
+  <div class="settings-card">
+    <div class="card-header-row">
+      <span class="card-title">⚙️ Strategy Thresholds</span>
+      <span style="font-size: 11px; color: var(--sapphire); font-weight: 800;">Real-Time Auto-Tune</span>
+    </div>
+
+    <div class="slider-item">
+      <div class="slider-top-row">
+        <span class="slider-label">💰 Minimum Fare</span>
+        <span class="slider-value" id="valMinFare">₹40</span>
+      </div>
+      <input type="range" id="sliderMinFare" min="20" max="150" value="40" oninput="updateSettings()">
+    </div>
+
+    <div class="slider-item">
+      <div class="slider-top-row">
+        <span class="slider-label">📏 Max Pickup Deadhead</span>
+        <span class="slider-value" id="valMaxPickup">3.0 km</span>
+      </div>
+      <input type="range" id="sliderMaxPickup" min="1" max="10" step="0.5" value="3.0" oninput="updateSettings()">
+    </div>
+  </div>
+
+  <!-- Automation Engine 2x2 Toggle Matrix -->
+  <div class="matrix-card">
+    <div class="card-header-row">
+      <span class="card-title">⚡ Automation Matrix</span>
+      <span style="font-size: 11px; color: var(--emerald); font-weight: 800;">ACTIVE</span>
+    </div>
+
+    <div class="matrix-grid">
+      <div class="toggle-widget">
+        <div class="toggle-top">
+          <span class="toggle-title">⚡ Auto-Accept</span>
+          <label class="ios-switch">
+            <input type="checkbox" id="checkAutoAccept" checked onchange="updateSettings()">
+            <span class="ios-slider"></span>
+          </label>
+        </div>
+        <span class="toggle-sub">Profitable rides</span>
+      </div>
+
+      <div class="toggle-widget">
+        <div class="toggle-top">
+          <span class="toggle-title">🔊 Voice Cues</span>
+          <label class="ios-switch">
+            <input type="checkbox" id="checkVoice" checked onchange="toggleVoice()">
+            <span class="ios-slider"></span>
+          </label>
+        </div>
+        <span class="toggle-sub">Audio prompts</span>
+      </div>
+
+      <div class="toggle-widget">
+        <div class="toggle-top">
+          <span class="toggle-title">🛡️ Cyber HUD</span>
+          <label class="ios-switch">
+            <input type="checkbox" id="checkHud" checked onchange="updateSettings()">
+            <span class="ios-slider"></span>
+          </label>
+        </div>
+        <span class="toggle-sub">Floating pill</span>
+      </div>
+
+      <div class="toggle-widget">
+        <div class="toggle-top">
+          <span class="toggle-title">🎧 Audio Fix</span>
+          <label class="ios-switch">
+            <input type="checkbox" id="checkAudioFix" checked onchange="showToast('Bluetooth normalizer active')">
+            <span class="ios-slider"></span>
+          </label>
+        </div>
+        <span class="toggle-sub">Auto-normalizer</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DEDICATED DEMO MODE SCREEN (SLIDES IN ON CLICK) -->
+<div class="demo-view" id="demoView">
+  <div class="demo-container">
+
+    <!-- Demo Navigation Header -->
+    <div class="demo-header">
+      <button class="btn-back" onclick="closeDemoMode()">← Dashboard</button>
+      <span class="demo-header-title">⚡ Interactive Ride Simulation</span>
+      <div style="width: 70px;"></div>
+    </div>
+
+    <!-- Scenario Selector Pills -->
+    <div class="scenarios-scroll">
+      <div class="scenario-chip selected" id="chip1" onclick="selectScenario(1)">
+        <span>⚡</span> <span>Prime Surge (₹180)</span>
+      </div>
+      <div class="scenario-chip" id="chip2" onclick="selectScenario(2)">
+        <span>🛑</span> <span>Money Trap (₹35)</span>
+      </div>
+      <div class="scenario-chip" id="chip3" onclick="selectScenario(3)">
+        <span>⚠️</span> <span>Marginal (₹95)</span>
+      </div>
+      <div class="scenario-chip" id="chip4" onclick="selectScenario(4)">
+        <span>🌧️</span> <span>Rain Surge (₹210)</span>
+      </div>
+    </div>
+
+    <!-- Floating HUD Card (Cyberpunk) -->
+    <div class="hud-card" id="hudCard">
+      <div class="hud-top">
+        <span class="hud-badge badge-accept" id="hudBadge">PROFITABLE RIDE</span>
+        <span style="font-size: 11px; color: var(--text-sub); font-weight: 800;" id="hudEta">ETA: 6 mins</span>
+      </div>
+
+      <div class="hud-stats-grid">
+        <div class="stat-box">
+          <div class="val" id="hudNetRate">₹42.8</div>
+          <div class="lbl">Net ₹/km</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="hudHourly">₹480</div>
+          <div class="lbl">Hourly Pot.</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="hudScore">92/100</div>
+          <div class="lbl">AI Score</div>
+        </div>
+      </div>
+
+      <div class="hud-direction-row">
+        <div>
+          <span class="compass-needle" id="compassIcon">🧭</span>
+          <span id="hudDirectionText">NE (45°) • TOWARDS HOME</span>
+        </div>
+        <span style="font-size: 11px; color: var(--sapphire); font-weight: 900;" id="hudSurgeTag">1.4x SURGE</span>
+      </div>
+
+      <div class="hud-progress-wrap">
+        <div class="hud-progress-bar" id="hudProgressBar"></div>
+      </div>
+
+      <div class="hud-action-text" id="hudActionText">
+        Auto-Accepting in 5s...
+      </div>
+    </div>
+
+    <!-- Tactical Radar Card -->
+    <div class="radar-card">
+      <div style="display:flex; justify-content:space-between; width:100%; font-size:11px; font-weight:900;">
+        <span style="color:var(--emerald);">🛰️ TACTICAL RADAR SCANNER</span>
+        <span style="color:var(--text-sub);">Range: 10 km • Real-time</span>
+      </div>
+      <canvas id="radarCanvas" class="radar-canvas" width="340" height="155"></canvas>
+    </div>
+
+    <!-- Simulated Phone Rapido Ride Screen -->
+    <div class="ride-card">
+      <div class="ride-fare-row">
+        <div>
+          <span class="ride-fare" id="displayFare">₹180</span>
+          <span style="font-size: 12px; color: var(--text-sub);"> (Online Pay)</span>
+        </div>
+        <span class="ride-tag" id="displayCategory">PRIME OFFER</span>
+      </div>
+
+      <div class="ride-detail">
+        <span>📍</span> <span id="displayPickup">Pickup: 0.8 km (Koramangala 5th Block)</span>
+      </div>
+      <div class="ride-detail">
+        <span>🏁</span> <span id="displayDrop">Drop: 3.4 km (Indiranagar 100ft Road)</span>
+      </div>
+      <div class="ride-detail">
+        <span>⏱️</span> <span id="displayTime">Est. Duration: 14 mins</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-action btn-reject" id="btnReject" onclick="manualReject()">✕ REJECT</button>
+        <button class="btn-action btn-accept" id="btnAccept" onclick="manualAccept()">⚡ ACCEPT ORDER</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Floating Toast -->
+<div class="toast" id="toastMsg"></div>
+
+<script>
+  let config = { minFare: 40, maxPickupKm: 3.0, autoAccept: true, autoReject: true, prioritizeHome: true, voice: true, audioFx: true };
+  let currentOffer = null, countdownTimer = null, audioCtx = null, radarAngle = 0, isDemoOpen = false;
+
+  function initAudioContext() {
+    if (!audioCtx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) audioCtx = new AC(); }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function playTone(freq, type, duration, delay = 0) {
+    if (!config.audioFx) return;
+    try {
+      initAudioContext();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + delay);
+      osc.stop(audioCtx.currentTime + delay + duration);
+    } catch(e) {}
+  }
+
+  function playAcceptSound() { playTone(587.33, 'sine', 0.12, 0); playTone(880, 'sine', 0.16, 0.12); playTone(1174, 'sine', 0.28, 0.28); }
+  function playRejectSound() { playTone(280, 'sawtooth', 0.15, 0); playTone(180, 'sawtooth', 0.25, 0.16); }
+  function playTickSound() { playTone(1200, 'triangle', 0.04, 0); }
+
+  function speak(text) {
+    if (!config.voice || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1.05;
+    window.speechSynthesis.speak(u);
+  }
+
+  function toggleVoice() {
+    config.voice = !config.voice;
+    document.getElementById('voiceText').innerText = config.voice ? 'Voice' : 'Muted';
+    document.getElementById('voiceIcon').innerText = config.voice ? '🔊' : '🔇';
+    showToast(config.voice ? 'Voice Announcements Active' : 'Voice Announcements Muted');
+    if (config.voice) speak('Voice assistant active.');
+  }
+
+  function toggleAudioFx() {
+    config.audioFx = !config.audioFx;
+    document.getElementById('tileAudioStatus').innerText = config.audioFx ? 'Active' : 'Muted';
+    showToast(config.audioFx ? 'Sound FX Enabled' : 'Sound FX Muted');
+    if (config.audioFx) playAcceptSound();
+  }
+
+  function requestDeviceLocation() {
+    initAudioContext();
+    if (!('geolocation' in navigator)) { showToast('GPS not supported'); return; }
+    document.getElementById('tileGpsStatus').innerText = 'Syncing...';
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        document.getElementById('tileGpsStatus').innerText = `Active (±${Math.round(pos.coords.accuracy)}m)`;
+        document.getElementById('tileGpsStatus').style.color = 'var(--emerald)';
+        showToast('📍 Live GPS Synced!');
+        playTone(900, 'sine', 0.2, 0);
+      },
+      (err) => {
+        document.getElementById('tileGpsStatus').innerText = 'Denied';
+        document.getElementById('tileGpsStatus').style.color = 'var(--ruby)';
+        showToast('GPS access denied.');
+      }
+    );
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toastMsg');
+    t.innerText = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 2200);
+  }
+
+  function updateSettings() {
+    config.minFare = parseFloat(document.getElementById('sliderMinFare').value);
+    config.maxPickupKm = parseFloat(document.getElementById('sliderMaxPickup').value);
+    document.getElementById('valMinFare').innerText = '₹' + config.minFare;
+    document.getElementById('valMaxPickup').innerText = config.maxPickupKm.toFixed(1) + ' km';
+    if (isDemoOpen && currentOffer) evaluateAndDisplay(currentOffer);
+  }
+
+  // Demo Mode Navigation
+  function openDemoMode() {
+    initAudioContext();
+    isDemoOpen = true;
+    document.getElementById('demoView').classList.add('active');
+    selectScenario(1);
+    requestAnimationFrame(renderRadar);
+  }
+
+  function closeDemoMode() {
+    isDemoOpen = false;
+    if (countdownTimer) clearInterval(countdownTimer);
+    document.getElementById('demoView').classList.remove('active');
+  }
+
+  const scenarios = {
+    1: { id: 1, fare: 180, pickupKm: 0.8, pickupLoc: "Koramangala 5th Block", dropLoc: "Indiranagar 100ft Road", dropDistanceKm: 3.4, isTowardsHome: true, bearing: 42, compass: "NE", surge: "1.4x SURGE", category: "PRIME OFFER", timeEst: "14 mins" },
+    2: { id: 2, fare: 35, pickupKm: 4.8, pickupLoc: "BTM 2nd Stage", dropLoc: "Whitefield Outer Ring", dropDistanceKm: 18.0, isTowardsHome: false, bearing: 110, compass: "ESE", surge: "NO SURGE", category: "DEADHEAD TRAP", timeEst: "48 mins" },
+    3: { id: 3, fare: 95, pickupKm: 2.2, pickupLoc: "Sony Signal", dropLoc: "Domlur Flyover", dropDistanceKm: 4.1, isTowardsHome: true, bearing: 20, compass: "NNE", surge: "1.1x SURGE", category: "MARGINAL RIDE", timeEst: "18 mins" },
+    4: { id: 4, fare: 210, pickupKm: 0.6, pickupLoc: "Forum Mall Koramangala", dropLoc: "MG Road Metro", dropDistanceKm: 5.2, isTowardsHome: true, bearing: 345, compass: "NNW", surge: "2.1x RAIN SURGE", category: "RAIN SURGE", timeEst: "22 mins" }
+  };
+
+  function selectScenario(id) {
+    initAudioContext();
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('chip' + i).classList.remove('selected');
+    }
+    document.getElementById('chip' + id).classList.add('selected');
+    currentOffer = scenarios[id];
+    evaluateAndDisplay(currentOffer);
+  }
+
+  function evaluateAndDisplay(offer) {
+    if (countdownTimer) clearInterval(countdownTimer);
+
+    // Update Simulated Ride Card
+    document.getElementById('displayFare').innerText = '₹' + offer.fare;
+    document.getElementById('displayCategory').innerText = offer.category;
+    document.getElementById('displayPickup').innerText = `Pickup: ${offer.pickupKm} km (${offer.pickupLoc})`;
+    document.getElementById('displayDrop').innerText = `Drop: ${offer.dropDistanceKm} km (${offer.dropLoc})`;
+    document.getElementById('displayTime').innerText = `Est. Duration: ${offer.timeEst}`;
+
+    // Calculate Metrics
+    const totalKm = offer.pickupKm + offer.dropDistanceKm;
+    const netRate = (offer.fare / totalKm).toFixed(1);
+    const hourlyRate = Math.round((offer.fare / parseInt(offer.timeEst)) * 60);
+    const meetsCriteria = (offer.fare >= config.minFare) && (offer.pickupKm <= config.maxPickupKm) && (!config.prioritizeHome || offer.isTowardsHome);
+
+    document.getElementById('hudNetRate').innerText = '₹' + netRate;
+    document.getElementById('hudHourly').innerText = '₹' + hourlyRate;
+    document.getElementById('hudSurgeTag').innerText = offer.surge;
+    document.getElementById('hudDirectionText').innerText = `${offer.compass} (${offer.bearing}°) • ${offer.isTowardsHome ? 'TOWARDS HOME' : 'AWAY FROM HOME'}`;
+    document.getElementById('compassIcon').style.transform = `rotate(${offer.bearing}deg)`;
+
+    const hudCard = document.getElementById('hudCard');
+    const hudBadge = document.getElementById('hudBadge');
+    const hudBar = document.getElementById('hudProgressBar');
+    const hudAction = document.getElementById('hudActionText');
+
+    let score = Math.min(99, Math.max(15, Math.round((netRate / 45) * 80 + (offer.isTowardsHome ? 18 : 0))));
+    document.getElementById('hudScore').innerText = score + '/100';
+
+    if (meetsCriteria) {
+      hudCard.style.borderColor = 'var(--emerald)';
+      hudCard.style.boxShadow = '0 16px 45px rgba(0, 0, 0, 0.8), 0 0 30px var(--emerald-glow), inset 0 1px 0 var(--glass-highlight)';
+      hudBadge.className = 'hud-badge badge-accept';
+      hudBadge.innerText = 'HIGH PROFIT • ACCEPT';
+      hudBar.style.background = 'linear-gradient(90deg, var(--emerald) 0%, #34D399 100%)';
+      hudBar.style.boxShadow = '0 0 12px var(--emerald)';
+      hudAction.style.color = 'var(--emerald)';
+      playAcceptSound();
+      speak(`New high profit order to ${offer.dropLoc}. ${offer.fare} rupees. Auto-accepting.`);
+      startCountdown(true);
+    } else {
+      hudCard.style.borderColor = 'var(--ruby)';
+      hudCard.style.boxShadow = '0 16px 45px rgba(0, 0, 0, 0.8), 0 0 30px var(--ruby-glow), inset 0 1px 0 var(--glass-highlight)';
+      hudBadge.className = 'hud-badge badge-reject';
+      hudBadge.innerText = 'MONEY TRAP • SKIP';
+      hudBar.style.background = 'linear-gradient(90deg, var(--ruby) 0%, #F43F5E 100%)';
+      hudBar.style.boxShadow = '0 0 12px var(--ruby)';
+      hudAction.style.color = 'var(--ruby)';
+      playRejectSound();
+      speak(`Warning. Low profit order to ${offer.dropLoc}. Skipping.`);
+      startCountdown(false);
+    }
+  }
+
+  function startCountdown(isAccept) {
+    let timeLeft = 5.0;
+    const hudBar = document.getElementById('hudProgressBar');
+    const hudAction = document.getElementById('hudActionText');
+
+    countdownTimer = setInterval(() => {
+      timeLeft -= 0.1;
+      const pct = (timeLeft / 5.0) * 100;
+      hudBar.style.width = pct + '%';
+      hudAction.innerText = `${isAccept ? 'Auto-Accepting' : 'Auto-Skipping'} in ${Math.ceil(timeLeft)}s...`;
+
+      if (timeLeft <= 0) {
+        clearInterval(countdownTimer);
+        hudBar.style.width = '0%';
+        if (isAccept) {
+          triggerAutoAccept();
+        } else {
+          triggerAutoReject();
+        }
+      }
+    }, 100);
+  }
+
+  function triggerAutoAccept() {
+    const btn = document.getElementById('btnAccept');
+    btn.classList.add('auto-click-ripple');
+    document.getElementById('hudActionText').innerText = '🎉 ORDER ACCEPTED! DISPATCHED';
+    document.getElementById('hudActionText').style.color = 'var(--emerald)';
+    showToast('⚡ Auto-Accepted Ride Order!');
+    playAcceptSound();
+    speak('Ride accepted. Starting navigation.');
+    setTimeout(() => { btn.classList.remove('auto-click-ripple'); }, 800);
+  }
+
+  function triggerAutoReject() {
+    const btn = document.getElementById('btnReject');
+    btn.classList.add('auto-click-ripple');
+    document.getElementById('hudActionText').innerText = '❌ TRAP SKIPPED! STANDBY';
+    document.getElementById('hudActionText').style.color = 'var(--ruby)';
+    showToast('🛑 Screened & Skipped Unprofitable Ride');
+    playRejectSound();
+    setTimeout(() => { btn.classList.remove('auto-click-ripple'); }, 800);
+  }
+
+  function manualAccept() {
+    if (countdownTimer) clearInterval(countdownTimer);
+    triggerAutoAccept();
+  }
+
+  function manualReject() {
+    if (countdownTimer) clearInterval(countdownTimer);
+    triggerAutoReject();
+  }
+
+  // Tactical Radar Canvas Rendering Loop
+  function renderRadar() {
+    if (!isDemoOpen) return;
+    const canvas = document.getElementById('radarCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    const cx = w / 2, cy = h / 2;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Radar Circles
+    ctx.strokeStyle = 'rgba(0, 245, 160, 0.18)';
+    ctx.lineWidth = 1;
+    for (let r = 25; r < 75; r += 24) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Grid crosshairs
+    ctx.beginPath();
+    ctx.moveTo(cx, 10); ctx.lineTo(cx, h - 10);
+    ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy);
+    ctx.strokeStyle = 'rgba(0, 245, 160, 0.12)';
+    ctx.stroke();
+
+    // Sweeping Radar Line
+    radarAngle = (radarAngle + 0.04) % (Math.PI * 2);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(radarAngle);
+    const grad = ctx.createLinearGradient(0, 0, 80, 0);
+    grad.addColorStop(0, 'rgba(0, 245, 160, 0.45)');
+    grad.addColorStop(1, 'rgba(0, 245, 160, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, 75, 0, 0.45);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // Home Base Indicator (Indiranagar)
+    ctx.fillStyle = '#38BDF8';
+    ctx.shadowColor = '#38BDF8';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(cx + 32, cy - 35, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#38BDF8';
+    ctx.font = '9px sans-serif';
+    ctx.fillText('HOME BASE', cx + 40, cy - 32);
+
+    // Current Offer Blip
+    if (currentOffer) {
+      const rad = (currentOffer.bearing - 90) * (Math.PI / 180);
+      const dist = Math.min(65, currentOffer.pickupKm * 15 + 15);
+      const bx = cx + Math.cos(rad) * dist;
+      const by = cy + Math.sin(rad) * dist;
+
+      ctx.fillStyle = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
+      ctx.shadowColor = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
+      ctx.shadowBlur = 14;
+      ctx.beginPath();
+      ctx.arc(bx, by, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Lock Reticle
+      ctx.strokeStyle = currentOffer.isTowardsHome ? '#00F5A0' : '#FF2A55';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(bx - 9, by - 9, 18, 18);
+    }
+
+    // Driver Center Blip
+    ctx.fillStyle = '#FFFFFF';
+    ctx.shadowColor = '#FFFFFF';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    if (isDemoOpen) requestAnimationFrame(renderRadar);
+  }
+
+  // Pre-load audio context on first click
+  window.addEventListener('click', () => { initAudioContext(); }, { once: true });
+</script>
+
+</body>
+</html>
